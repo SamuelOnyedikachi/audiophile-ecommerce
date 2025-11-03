@@ -1,0 +1,42 @@
+@import 'tailwindcss/preflight';
+@import 'tailwindcss/theme';
+@import 'tailwindcss/utilities';
+
+/* === GLOBAL STYLES === */
+:root {
+  --color-primary: #d87d4a;
+  --color-secondary: #101010;
+  --color-light: #ffffff;
+  --color-dark: #191919;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  background-color: var(--color-light);
+  color: #000;
+  font-family: 'Manrope', sans-serif;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+/* Buttons */
+@layer components {
+  .btn {
+    @apply bg-[#d87d4a] text-white uppercase tracking-widest font-semibold py-3 px-6 hover:bg-[#fbaf85] transition;
+  }
+
+  .btn-outline {
+    @apply border border-black text-black uppercase tracking-widest font-semibold py-3 px-6 hover:bg-black hover:text-white transition;
+  }
+}
