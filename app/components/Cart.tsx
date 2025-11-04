@@ -1,6 +1,116 @@
+// 'use client';
+
+// import { useState } from 'react';
+// import { useCart } from './CartProvider';
+// import Link from 'next/link';
+
+// export default function Cart({
+//   setCartOpen,
+// }: {
+//   setCartOpen: (v: boolean) => void;
+// }) {
+//   const { items, remove, updateQty, subtotal, clear } = useCart();
+//   const shipping = subtotal > 0 ? 25 : 0;
+//   const taxes = Math.round(subtotal * 0.07);
+//   const total = subtotal + shipping + taxes;
+
+//   return (
+//     <aside className="fixed right-30 top-30 h-[70%] rounded-xl w-full md:w-96 bg-[#ffffff] shadow-lg z-50 p-6 overflow-auto">
+//       <div className="flex justify-between items-center mb-4">
+//         <h3 className="text-lg font-semibold">Your Cart</h3>
+//         <button onClick={() => setCartOpen(false)} className="text-gray-600">
+//           Close
+//         </button>
+//       </div>
+
+//       {items.length === 0 ? (
+//         <div className="py-20 text-center">
+//           <p className="text-gray-500">Your cart is empty.</p>
+//           <Link href="/" className="mt-4 inline-block text-orange-600">
+//             Continue Shopping
+//           </Link>
+//         </div>
+//       ) : (
+//         <>
+//           <ul className="space-y-4">
+//             {items.map((it) => (
+//               <li key={it.id} className="flex items-center gap-4">
+//                 <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden">
+//                   {it.image && (
+//                     <img
+//                       src={it.image}
+//                       alt={it.name}
+//                       className="w-full h-full object-cover"
+//                     />
+//                   )}
+//                 </div>
+//                 <div className="flex-1">
+//                   <div className="flex justify-between">
+//                     <p className="font-medium">{it.name}</p>
+//                     <p className="font-semibold">
+//                       ${(it.price * it.qty).toFixed(2)}
+//                     </p>
+//                   </div>
+//                   <div className="mt-2 flex items-center gap-2">
+//                     <input
+//                       type="number"
+//                       value={it.qty}
+//                       min={1}
+//                       onChange={(e) => updateQty(it.id, Number(e.target.value))}
+//                       className="w-20 p-1 border rounded"
+//                     />
+//                     <button
+//                       onClick={() => remove(it.id)}
+//                       className="text-red-500 text-sm"
+//                     >
+//                       Remove
+//                     </button>
+//                   </div>
+//                 </div>
+//               </li>
+//             ))}
+//           </ul>
+
+//           <div className="mt-6">
+//             <div className="flex justify-between mb-2">
+//               <span>Subtotal</span>
+//               <span>${subtotal.toFixed(2)}</span>
+//             </div>
+//             <div className="flex justify-between mb-2">
+//               <span>Shipping</span>
+//               <span>${shipping.toFixed(2)}</span>
+//             </div>
+//             <div className="flex justify-between mb-4">
+//               <span>Taxes</span>
+//               <span>${taxes.toFixed(2)}</span>
+//             </div>
+//             <div className="flex justify-between font-bold text-lg mb-4">
+//               <span>Total</span>
+//               <span>${total.toFixed(2)}</span>
+//             </div>
+
+//             <Link
+//               href="/checkout"
+//               onClick={() => setCartOpen(false)}
+//               className="block text-center bg-orange-600 text-white py-3 rounded"
+//             >
+//               Checkout
+//             </Link>
+
+//             <button
+//               onClick={() => clear()}
+//               className="mt-4 block w-full text-center text-sm text-gray-600"
+//             >
+//               Clear Cart
+//             </button>
+//           </div>
+//         </>
+//       )}
+//     </aside>
+//   );
+// }
 'use client';
 
-import { useState } from 'react';
 import { useCart } from './CartProvider';
 import Link from 'next/link';
 
@@ -15,97 +125,118 @@ export default function Cart({
   const total = subtotal + shipping + taxes;
 
   return (
-    <aside className="fixed right-30 top-30 h-[70%] rounded-xl w-full md:w-96 bg-[#ffffff] shadow-lg z-50 p-6 overflow-auto">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">Your Cart</h3>
-        <button onClick={() => setCartOpen(false)} className="text-gray-600">
-          Close
-        </button>
-      </div>
-
-      {items.length === 0 ? (
-        <div className="py-20 text-center">
-          <p className="text-gray-500">Your cart is empty.</p>
-          <Link href="/" className="mt-4 inline-block text-orange-600">
-            Continue Shopping
-          </Link>
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-start md:items-center z-50 p-4">
+      <aside className="relative w-full sm:w-[90%] md:w-[400px] bg-white rounded-xl shadow-2xl p-6 overflow-y-auto max-h-[85vh]">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">Your Cart</h3>
+          <button
+            onClick={() => setCartOpen(false)}
+            className="text-gray-600 hover:text-gray-900 transition"
+          >
+            ✕
+          </button>
         </div>
-      ) : (
-        <>
-          <ul className="space-y-4">
-            {items.map((it) => (
-              <li key={it.id} className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden">
-                  {it.image && (
-                    <img
-                      src={it.image}
-                      alt={it.name}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-                </div>
-                <div className="flex-1">
-                  <div className="flex justify-between">
-                    <p className="font-medium">{it.name}</p>
-                    <p className="font-semibold">
-                      ${(it.price * it.qty).toFixed(2)}
-                    </p>
-                  </div>
-                  <div className="mt-2 flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={it.qty}
-                      min={1}
-                      onChange={(e) => updateQty(it.id, Number(e.target.value))}
-                      className="w-20 p-1 border rounded"
-                    />
-                    <button
-                      onClick={() => remove(it.id)}
-                      className="text-red-500 text-sm"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
 
-          <div className="mt-6">
-            <div className="flex justify-between mb-2">
-              <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between mb-2">
-              <span>Shipping</span>
-              <span>${shipping.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between mb-4">
-              <span>Taxes</span>
-              <span>${taxes.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between font-bold text-lg mb-4">
-              <span>Total</span>
-              <span>${total.toFixed(2)}</span>
-            </div>
-
+        {/* Empty Cart */}
+        {items.length === 0 ? (
+          <div className="py-16 text-center">
+            <p className="text-gray-500 mb-4">Your cart is empty.</p>
             <Link
-              href="/checkout"
+              href="/"
+              className="inline-block text-orange-600 font-medium hover:underline"
               onClick={() => setCartOpen(false)}
-              className="block text-center bg-orange-600 text-white py-3 rounded"
             >
-              Checkout
+              Continue Shopping
             </Link>
-
-            <button
-              onClick={() => clear()}
-              className="mt-4 block w-full text-center text-sm text-gray-600"
-            >
-              Clear Cart
-            </button>
           </div>
-        </>
-      )}
-    </aside>
+        ) : (
+          <>
+            {/* Cart Items */}
+            <ul className="space-y-4">
+              {items.map((it) => (
+                <li
+                  key={it.id}
+                  className="flex items-center gap-4 border-b pb-4 last:border-none"
+                >
+                  <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                    {it.image && (
+                      <img
+                        src={it.image}
+                        alt={it.name}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex justify-between">
+                      <p className="font-medium text-gray-800">{it.name}</p>
+                      <p className="font-semibold text-gray-900">
+                        ${(it.price * it.qty).toFixed(2)}
+                      </p>
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <input
+                        type="number"
+                        value={it.qty}
+                        min={1}
+                        onChange={(e) =>
+                          updateQty(it.id, Number(e.target.value))
+                        }
+                        className="w-16 p-1 text-center border rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                      />
+                      <button
+                        onClick={() => remove(it.id)}
+                        className="text-red-500 text-sm hover:underline"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            {/* Totals */}
+            <div className="mt-6 space-y-2 text-gray-700">
+              <div className="flex justify-between">
+                <span>Subtotal</span>
+                <span>${subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Shipping</span>
+                <span>${shipping.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Taxes</span>
+                <span>${taxes.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between font-bold text-lg text-gray-900 border-t pt-3">
+                <span>Total</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="mt-6 space-y-3">
+              <Link
+                href="/checkout"
+                onClick={() => setCartOpen(false)}
+                className="block text-center bg-orange-600 text-white py-3 rounded-md hover:bg-orange-500 transition"
+              >
+                Checkout
+              </Link>
+
+              <button
+                onClick={() => clear()}
+                className="block w-full text-center text-sm text-gray-500 hover:text-gray-700"
+              >
+                Clear Cart
+              </button>
+            </div>
+          </>
+        )}
+      </aside>
+    </div>
   );
 }

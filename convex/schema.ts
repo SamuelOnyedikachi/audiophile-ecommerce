@@ -1,23 +1,35 @@
 // convex/schema.ts
-import { defineSchema } from 'convex/schema';
+import { defineSchema, defineTable } from 'convex/schema';
+import { v } from 'convex/values';
 
 export default defineSchema({
-  orders: {
-    customer: { name: 'string', email: 'string', phone: 'string' },
-    shipping: {
-      address: 'string',
-      city: 'string',
-      zipcode: 'string',
-      country: 'string',
-    },
-    items: [{ id: 'string', name: 'string', price: 'number', qty: 'number' }],
-    totals: {
-      subtotal: 'number',
-      shipping: 'number',
-      taxes: 'number',
-      total: 'number',
-    },
-    status: 'string',
-    createdAt: 'string',
-  },
+  orders: defineTable({
+    customer: v.object({
+      name: v.string(),
+      email: v.string(),
+      phone: v.string(),
+    }),
+    shipping: v.object({
+      address: v.string(),
+      city: v.string(),
+      zipcode: v.string(),
+      country: v.string(),
+    }),
+    items: v.array(
+      v.object({
+        id: v.string(),
+        name: v.string(),
+        price: v.number(),
+        qty: v.number(),
+      })
+    ),
+    totals: v.object({
+      subtotal: v.number(),
+      shipping: v.number(),
+      taxes: v.number(),
+      total: v.number(),
+    }),
+    status: v.string(),
+    createdAt: v.string(),
+  }),
 });
