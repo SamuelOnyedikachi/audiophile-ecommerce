@@ -48,7 +48,7 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div className="flex md:items-end">
+            <div className="flex flex-col md:items-end">
               <ul className="text-sm flex gap-5 text-gray-500 space-y-2">
                 <li>
                   <Link href="/contact" className="hover:text-orange-400">
