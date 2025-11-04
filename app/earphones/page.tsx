@@ -8,7 +8,7 @@ export default function EarphonesPage() {
       'Tailor your listening experience with bespoke dynamic drivers delivering truly exceptional sound. Enjoy incredible clarity and a secure fit for all-day comfort.',
     image: '/images/product-yx1-earphones/desktop/image-product.jpg',
     new: true,
-    href: '/product/yx1-wireless-earphones',
+    href: '/product/yx1-earphones',
   };
 
 
@@ -69,7 +69,7 @@ export default function EarphonesPage() {
             <p className="text-gray-600 mb-8 leading-relaxed max-w-md">
               {product.description}
             </p>
-            <Link href={product.href} className="btn">
+            <Link href={product.href} className="p-3 btn">
               See Product
             </Link>
           </div>

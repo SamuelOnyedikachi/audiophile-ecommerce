@@ -9,7 +9,7 @@ export default function SpeakersPage() {
         'Upgrade your sound system with the all new ZX9 active speaker. It’s a bookshelf speaker system that offers truly wireless connectivity and exceptional sound quality.',
       image: '/images/product-zx9-speaker/desktop/image-product.jpg',
       new: true,
-      href: '/product/zx9',
+      href: '/product/zx9-speaker',
     },
     {
       name: 'ZX7 Speaker',
@@ -17,7 +17,7 @@ export default function SpeakersPage() {
         'Stream high-quality sound wirelessly with minimal loss. The ZX7 bookshelf speaker uses high-end audio components that represent the top of its class.',
       image: '/images/product-zx7-speaker/desktop/image-product.jpg',
       new: false,
-      href: '/product/zx7',
+      href: '/product/zx7-speaker',
     },
   ];
 
