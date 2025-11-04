@@ -1,11 +1,12 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
     <div className="w-full">
       {/* === HERO SECTION === */}
       <section className="bg-[#121212] text-white ">
-        <div className="max-w-[90%] mx-auto gap-9 flex flex-col md:flex-row items-center justify-between px-8 md:px-6 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto gap-9 flex flex-col md:flex-row items-center justify-between px-8 md:px-6 relative overflow-hidden">
           <div className="max-w-lg space-y-6 z-10">
             <p className="uppercase text-2xl text-gray-400 tracking-[0.3em]">
               New Product
@@ -17,12 +18,12 @@ export default function Home() {
               Experience natural, lifelike audio and exceptional build quality
               made for the passionate music enthusiast.
             </p>
-            <a
+            <Link
               href="/product/xx99-mark-two"
               className="btn p-4 mt-5 inline-block"
             >
               See Product
-            </a>
+            </Link>
           </div>
           <div className="relative md:mt-0">
             <Image
@@ -38,8 +39,7 @@ export default function Home() {
       </section>
 
       {/* === CATEGORY CARDS === */}
-      {/* === CATEGORY CARDS === */}
-      <section className="max-w-[90%] mx-auto grid md:grid-cols-3 gap-10 px-8 md:px-16 py-20 pt-50 bg-[#ffffff]">
+      <section className="max-w-7xl mx-auto grid md:grid-cols-3 gap-10 px-8 md:px-16 py-20 pt-50 bg-[#ffffff]">
         {[
           {
             title: 'Headphones',
@@ -76,20 +76,20 @@ export default function Home() {
             <h3 className="text-lg font-bold uppercase mt-6 mb-4">
               {item.title}
             </h3>
-            <a
+            <Link
               href={item.href}
               className="text-gray-600 flex items-center justify-center font-semibold uppercase tracking-widest hover:text-[#d87d4a]"
             >
               Shop <span className="ml-1 text-xl  text-orange-600 ">→</span>
-            </a>
+            </Link>
           </div>
         ))}
       </section>
 
       {/* === FEATURED PRODUCTS === */}
-      <section className="max-w-[90%] mx-auto px-8 md:px-16 py-20 space-y-16">
+      <section className="max-w-7xl mx-auto px-8 md:px-16 py-20 space-y-16">
         {/* ZX9 SPEAKER */}
-        <div className="bg-[#d87d4a] rounded-2xl flex flex-col md:flex-row items-center text-white px-18 md:px-36 overflow-hidden relative h-[530px]">
+        <div className="bg-[#d87d4a] rounded-2xl flex flex-col md:flex-row items-center text-white px-10 md:px-16 overflow-hidden relative h-[530px]">
           {/* Image wrapper */}
           <div className="relative w-full md:w-auto flex-shrink-0 h-full flex items-end justify-center">
             <Image
@@ -110,12 +110,12 @@ export default function Home() {
               Upgrade to premium speakers that are <br /> phenomenally built to
               deliver truly remarkable <br /> sound.
             </p>
-            <a
+            <Link
               href="/product/zx9-speaker"
               className="btn p-3 bg-black hover:bg-[#4c4c4c]"
             >
               See Product
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -130,9 +130,12 @@ export default function Home() {
           />
           <div className="absolute pl-8 top-1/2 -translate-y-1/2 left-8 md:left-16">
             <h3 className="text-4xl font-bold mb-10">ZX7 Speaker</h3>
-            <a href="/product/zx7-speaker" className="border hover:text-blue-50 p-3 btn-outline">
+            <Link
+              href="/product/zx7-speaker"
+              className="border hover:text-blue-50 p-3 btn-outline"
+            >
               See Product
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -147,9 +150,42 @@ export default function Home() {
           />
           <div className="bg-[#f1f1f1] rounded-2xl flex flex-col justify-center px-25 py-16">
             <h3 className="text-4xl font-bold mb-10">YX1 Earphones</h3>
-            <a href="/product/yx1-earphones" className="border p-3 hover:text-blue-50 btn-outline w-fit">
+            <Link
+              href="/product/yx1-earphones"
+              className="border p-3 hover:text-blue-50 btn-outline w-fit"
+            >
               See Product
-            </a>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Audio Gear */}
+      <section>
+        <div className="max-w-7xl mx-auto rounded-2xl flex flex-col md:flex-row items-center text-center md:text-left px-8 md:px-16 py-20 gap-10">
+          <div className="md:w-1/2">
+            <h2 className="text-4xl font-bold mb-10">
+              Bringing you the <br />{' '}
+              <span className="text-orange-500">best</span> audio gear
+            </h2>
+            <p className="text-gray-600 text-xl leading-relaxed">
+              Located at the heart of New York City, Audiophile is the premier
+              store for high end headphones, earphones, speakers, and audio
+              accessories. We have a large showroom and luxury demonstration
+              rooms available for you to browse and experience a wide range of
+              our products. Stop by our store to meet some of the fantastic
+              people who make Audiophile the best place to buy your portable
+              audio equipment.
+            </p>
+          </div>
+          <div className="md:w-1/2 ml-30">
+            <Image
+              src="/images/home/desktop/image-audio-gear.png"
+              alt="Audio Gear"
+              width={500}
+              height={400}
+              className="rounded-lg object-cover"
+            />
           </div>
         </div>
       </section>
