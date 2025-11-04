@@ -15,7 +15,7 @@ export default function Cart({
   const total = subtotal + shipping + taxes;
 
   return (
-    <aside className="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-lg z-50 p-6 overflow-auto">
+    <aside className="fixed right-30 top-30 h-[70%] rounded-xl w-full md:w-96 bg-[#ffffff] shadow-lg z-50 p-6 overflow-auto">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">Your Cart</h3>
         <button onClick={() => setCartOpen(false)} className="text-gray-600">

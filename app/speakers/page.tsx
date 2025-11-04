@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function SpeakersPage() {
   const products = [
@@ -19,6 +20,26 @@ export default function SpeakersPage() {
       href: '/product/zx7',
     },
   ];
+
+
+  const categories = [
+    {
+      title: 'Headphones',
+      img: '/images/shared/desktop/image-category-thumbnail-headphones.png',
+      href: '/headphones',
+    },
+    {
+      title: 'Speakers',
+      img: '/images/shared/desktop/image-category-thumbnail-speakers.png',
+      href: '/speakers',
+    },
+    {
+      title: 'Earphones',
+      img: '/images/shared/desktop/image-category-thumbnail-earphones.png',
+      href: '/earphones',
+    },
+  ];
+
 
   return (
     <main className="w-full">
@@ -57,6 +78,68 @@ export default function SpeakersPage() {
             </div>
           </div>
         ))}
+      </section>
+
+      {/* === CATEGORY CARDS === */}
+      <section className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 px-6 md:px-10 lg:px-16 py-20 bg-white">
+        {categories.map((item) => (
+          <div
+            key={item.title}
+            className="bg-[#f1f1f1] rounded-xl flex flex-col items-center justify-end h-48 md:h-56 pb-6 relative"
+          >
+            {/* Floating image */}
+            <div className="absolute -top-14">
+              <Image
+                src={item.img}
+                alt={item.title}
+                width={160}
+                height={160}
+                className="object-contain"
+              />
+            </div>
+
+            {/* Text content */}
+            <h3 className="text-base font-bold uppercase tracking-wider mb-3">
+              {item.title}
+            </h3>
+            <Link
+              href={item.href}
+              className="text-gray-600 flex items-center justify-center font-semibold uppercase tracking-widest hover:text-[#d87d4a]"
+            >
+              Shop <span className="ml-1 text-xl text-orange-600">→</span>
+            </Link>
+          </div>
+        ))}
+      </section>
+
+      {/* === AUDIO GEAR === */}
+      <section className="max-w-7xl mx-auto px-6 py-16 md:py-24">
+        <div className="flex flex-col-reverse lg:flex-row items-center text-center lg:text-left gap-12 lg:gap-20">
+          <div className="lg:w-1/2">
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 uppercase">
+              Bringing you the <br />
+              <span className="text-[#d87d4a]">best</span> audio gear
+            </h2>
+            <p className="text-gray-600 leading-relaxed text-lg">
+              Located at the heart of New York City, Audiophile is the premier
+              store for high-end headphones, earphones, speakers, and audio
+              accessories. We have a large showroom and luxury demonstration
+              rooms available for you to browse and experience a wide range of
+              our products. Stop by our store to meet some of the fantastic
+              people who make Audiophile the best place to buy your portable
+              audio equipment.
+            </p>
+          </div>
+          <div className="lg:w-1/2 w-full">
+            <Image
+              src="/images/shared/desktop/image-best-gear.jpg"
+              alt="Audio Gear"
+              width={540}
+              height={588}
+              className="rounded-lg object-cover"
+            />
+          </div>
+        </div>
       </section>
     </main>
   );

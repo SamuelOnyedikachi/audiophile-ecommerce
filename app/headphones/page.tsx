@@ -161,6 +161,7 @@ export default function HeadphonesPage() {
           </div>
         </div>
       </section>
-    </main>
+
+c    </main>
   );
 }
