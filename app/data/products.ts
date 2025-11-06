@@ -22,6 +22,7 @@ The XX99 Mark II is designed for audiophiles seeking the best in sound performan
       third: '/assets/product-xx99-mark-two/image-gallery-3.jpg',
     },
   },
+  
   {
     id: 2,
     slug: 'xx99-mark-one-headphones',

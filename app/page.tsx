@@ -64,7 +64,7 @@ export default function Home() {
       </section>
 
       {/* === CATEGORY CARDS === */}
-      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-6 md:px-10 py-20 bg-white">
+      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-6 md:px-10 py-20 pt-50 bg-white">
         {[
           {
             title: 'Headphones',
