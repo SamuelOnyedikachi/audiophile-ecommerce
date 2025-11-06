@@ -143,13 +143,12 @@
 //     console.log('✅ Order confirmation email sent:', result);
 //   },
 // });
-// convex/orders.ts
 import { mutation, query, action } from './_generated/server';
 import { v } from 'convex/values';
 import { api } from './_generated/api';
 
 /**
- * Get a single order by ID
+ * ✅ Get a single order by ID
  */
 export const getOrder = query({
   args: { orderId: v.id('orders') },
@@ -164,15 +163,12 @@ export const getOrder = query({
 export const getAllOrders = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db
-      .query('orders')
-      .order('desc')
-      .collect();
+    return await ctx.db.query('orders').order('desc').collect();
   },
 });
 
 /**
- * Get all orders for a specific email
+ * ✅ Get all orders for a specific email
  */
 export const getOrdersByEmail = query({
   args: { email: v.string() },
@@ -186,8 +182,7 @@ export const getOrdersByEmail = query({
 });
 
 /**
- * Create a new order
- * (includes tracking + automatic confirmation email)
+ * ✅ Create a new order
  */
 export const createOrder = mutation({
   args: {
@@ -220,7 +215,6 @@ export const createOrder = mutation({
     createdAt: v.string(),
   },
   handler: async (ctx, args) => {
-    // Insert order into database
     const id = await ctx.db.insert('orders', {
       ...args,
       tracking: {
@@ -236,7 +230,7 @@ export const createOrder = mutation({
       deliveryConfirmed: false,
     });
 
-    // Send confirmation email (same logic preserved)
+    // Send confirmation email
     await ctx.scheduler.runAfter(0, api.orders.sendOrderConfirmation, {
       orderId: id,
     });
@@ -247,7 +241,48 @@ export const createOrder = mutation({
 });
 
 /**
- * Send order confirmation email
+ * ✅ Update tracking information (for admin dashboard)
+ */
+export const updateOrderTracking = mutation({
+  args: {
+    orderId: v.id('orders'),
+    trackingNumber: v.optional(v.string()),
+    carrier: v.optional(v.string()),
+    currentLocation: v.optional(v.string()),
+    estimatedDelivery: v.optional(v.string()),
+    status: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const order = await ctx.db.get(args.orderId);
+    if (!order) throw new Error('Order not found');
+
+    const updatedTracking = {
+      ...(order.tracking || {}),
+      trackingNumber: args.trackingNumber ?? order.tracking?.trackingNumber,
+      carrier: args.carrier ?? order.tracking?.carrier,
+      currentLocation: args.currentLocation ?? order.tracking?.currentLocation,
+      estimatedDelivery:
+        args.estimatedDelivery ?? order.tracking?.estimatedDelivery,
+      lastUpdated: new Date().toISOString(),
+      history: [
+        ...(order.tracking?.history || []),
+        {
+          status: args.status || 'Updated',
+          location: args.currentLocation || '—',
+          timestamp: new Date().toISOString(),
+          description: `Order status updated to "${args.status || 'Updated'}"`,
+        },
+      ],
+    };
+
+    await ctx.db.patch(args.orderId, { tracking: updatedTracking });
+
+    return { success: true, message: 'Order tracking updated successfully' };
+  },
+});
+
+/**
+ * ✅ Send order confirmation email
  */
 export const sendOrderConfirmation = action({
   args: { orderId: v.id('orders') },
