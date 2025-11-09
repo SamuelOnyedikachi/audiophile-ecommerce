@@ -15,8 +15,7 @@ export default function AdminDashboard() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple password check - in production, use proper auth
-    if (password === 'admin123') {
+    if (password === 'Admin123') {
       setIsAuthenticated(true);
     } else {
       alert('Invalid password');
@@ -44,7 +43,7 @@ export default function AdminDashboard() {
             </button>
           </form>
           <p className="text-sm text-gray-500 mt-4 text-center">
-            Demo password: admin123
+            Demo password: Admin123
           </p>
         </div>
       </div>
@@ -64,7 +63,6 @@ export default function AdminDashboard() {
           </button>
         </div>
 
-        {/* Stats Overview */}
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           <StatCard
             title="Total Orders"
@@ -100,7 +98,6 @@ export default function AdminDashboard() {
           />
         </div>
 
-        {/* Orders Table */}
         <div className="bg-white rounded-2xl shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -162,7 +159,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Update Modal */}
         {selectedOrder && (
           <UpdateTrackingModal
             order={selectedOrder}
@@ -209,7 +205,9 @@ function StatusBadge({ status }: { status: string }) {
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-semibold uppercase ${colors[status] || colors.pending}`}
+      className={`px-3 py-1 rounded-full text-xs font-semibold uppercase ${
+        colors[status] || colors.pending
+      }`}
     >
       {status}
     </span>
@@ -243,12 +241,18 @@ function UpdateTrackingModal({
     try {
       await onUpdate({
         orderId: order._id,
-        ...formData,
+        status: formData.status,
+        trackingNumber: formData.trackingNumber,
+        carrier: formData.carrier,
+        currentLocation: formData.currentLocation,
+        estimatedDelivery: formData.estimatedDelivery,
+        description: formData.description,
       });
-      alert('Tracking updated successfully!');
+      alert('✅ Tracking updated! Customer will receive an email.');
       onClose();
     } catch (error) {
-      alert('Failed to update tracking');
+      console.error(error);
+      alert('❌ Failed to update tracking');
     } finally {
       setUpdating(false);
     }
@@ -263,15 +267,17 @@ function UpdateTrackingModal({
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {/* Status */}
           <div>
-            <label className="block text-sm font-semibold mb-2">Status</label>
+            <label className="block text-sm font-semibold mb-2">
+              Status *
+            </label>
             <select
               value={formData.status}
               onChange={(e) =>
                 setFormData({ ...formData, status: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
+              required
             >
               <option value="pending">Pending</option>
               <option value="processing">Processing</option>
@@ -282,7 +288,6 @@ function UpdateTrackingModal({
             </select>
           </div>
 
-          {/* Carrier */}
           <div>
             <label className="block text-sm font-semibold mb-2">Carrier</label>
             <input
@@ -292,11 +297,10 @@ function UpdateTrackingModal({
                 setFormData({ ...formData, carrier: e.target.value })
               }
               placeholder="e.g., DHL, FedEx, UPS"
-              className="w-full p-3 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
             />
           </div>
 
-          {/* Tracking Number */}
           <div>
             <label className="block text-sm font-semibold mb-2">
               Tracking Number
@@ -308,11 +312,10 @@ function UpdateTrackingModal({
                 setFormData({ ...formData, trackingNumber: e.target.value })
               }
               placeholder="Enter tracking number"
-              className="w-full p-3 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
             />
           </div>
 
-          {/* Current Location */}
           <div>
             <label className="block text-sm font-semibold mb-2">
               Current Location *
@@ -323,13 +326,12 @@ function UpdateTrackingModal({
               onChange={(e) =>
                 setFormData({ ...formData, currentLocation: e.target.value })
               }
-              placeholder="e.g., New York Distribution Center"
-              className="w-full p-3 border border-gray-300 rounded-lg"
+              placeholder="e.g., Lagos Distribution Center"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
               required
             />
           </div>
 
-          {/* Description */}
           <div>
             <label className="block text-sm font-semibold mb-2">
               Update Description *
@@ -341,12 +343,11 @@ function UpdateTrackingModal({
               }
               placeholder="e.g., Package has arrived at sorting facility"
               rows={3}
-              className="w-full p-3 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
               required
             />
           </div>
 
-          {/* Estimated Delivery */}
           <div>
             <label className="block text-sm font-semibold mb-2">
               Estimated Delivery
@@ -357,16 +358,15 @@ function UpdateTrackingModal({
               onChange={(e) =>
                 setFormData({ ...formData, estimatedDelivery: e.target.value })
               }
-              className="w-full p-3 border border-gray-300 rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
             />
           </div>
 
-          {/* Buttons */}
           <div className="flex gap-4 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border-2 border-gray-300 py-3 rounded-lg font-semibold hover:bg-gray-50"
+              className="flex-1 border-2 border-gray-300 py-3 rounded-lg font-semibold hover:bg-gray-50 transition"
             >
               Cancel
             </button>

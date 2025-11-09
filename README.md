@@ -26,18 +26,21 @@ Audiophile is a full-stack e-commerce website specializing in premium audio equi
 ## ✨ Features
 
 ### 🛍️ E-Commerce Functionality
+
 - **Product Catalog**: Browse headphones, speakers, and earphones with detailed product pages
 - **Shopping Cart**: Real-time cart management with persistent storage
 - **Checkout Flow**: Complete checkout process with form validation
 - **Order Confirmation**: Beautiful confirmation pages with order summaries
 
 ### 🎨 Design & UX
+
 - **Pixel-Perfect Design**: Faithfully implements the Audiophile Figma design
 - **Responsive Layout**: Optimized for mobile, tablet, and desktop
 - **Modern UI**: Clean, minimalist design with smooth transitions
 - **Accessibility**: Screen-reader friendly with proper ARIA labels
 
 ### 🔧 Technical Features
+
 - **Real-time Database**: Convex backend for instant data synchronization
 - **Email Notifications**: Automated order confirmation emails via Resend
 - **Type Safety**: Full TypeScript implementation
@@ -47,16 +50,19 @@ Audiophile is a full-stack e-commerce website specializing in premium audio equi
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **[Next.js 14](https://nextjs.org/)** - React framework with App Router
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe development
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
 - **[Lucide React](https://lucide.dev/)** - Beautiful icon library
 
 ### Backend & Database
+
 - **[Convex](https://www.convex.dev/)** - Real-time backend platform
 - **[Resend](https://resend.com/)** - Transactional email service
 
 ### Development Tools
+
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
 - **Git** - Version control
@@ -64,6 +70,7 @@ Audiophile is a full-stack e-commerce website specializing in premium audio equi
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 18+ and npm/yarn/pnpm
 - Convex account ([Sign up](https://dashboard.convex.dev/))
 - Resend API key ([Sign up](https://resend.com/))
@@ -71,12 +78,14 @@ Audiophile is a full-stack e-commerce website specializing in premium audio equi
 ### Installation
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/yourusername/audiophile-ecommerce.git
 cd audiophile-ecommerce
 ```
 
 2. **Install dependencies**
+
 ```bash
 npm install
 # or
@@ -86,9 +95,11 @@ pnpm install
 ```
 
 3. **Set up Convex**
+
 ```bash
 npx convex dev
 ```
+
 This will create a new Convex project and generate your `NEXT_PUBLIC_CONVEX_URL`
 
 4. **Configure environment variables**
@@ -100,7 +111,7 @@ Create a `.env.local` file in the root directory:
 NEXT_PUBLIC_CONVEX_URL=https://your-convex-url.convex.cloud
 
 # Resend (for email notifications)
-RESEND_API_KEY=re_xxxxxxxxxxxx
+BREVO_API_KEY=re_xxxxxxxxxxxx
 FROM_EMAIL=Audiophile <onboarding@resend.dev>
 SUPPORT_EMAIL=support@audiophile.com
 
@@ -109,6 +120,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 5. **Run the development server**
+
 ```bash
 npm run dev
 ```
@@ -168,13 +180,13 @@ audiophile-ecommerce/
 
 ## 🔑 Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `NEXT_PUBLIC_CONVEX_URL` | Convex deployment URL | ✅ Yes |
-| `RESEND_API_KEY` | Resend API key for sending emails | ✅ Yes |
-| `FROM_EMAIL` | Email sender address | ⚠️ Recommended |
-| `SUPPORT_EMAIL` | Customer support email | ⚠️ Recommended |
-| `NEXT_PUBLIC_APP_URL` | App URL (for production links) | ⚠️ Recommended |
+| Variable                 | Description                       | Required       |
+| ------------------------ | --------------------------------- | -------------- |
+| `NEXT_PUBLIC_CONVEX_URL` | Convex deployment URL             | ✅ Yes         |
+| `BREVO_API_KEY`          | Resend API key for sending emails | ✅ Yes         |
+| `FROM_EMAIL`             | Email sender address              | ⚠️ Recommended |
+| `SUPPORT_EMAIL`          | Customer support email            | ⚠️ Recommended |
+| `NEXT_PUBLIC_APP_URL`    | App URL (for production links)    | ⚠️ Recommended |
 
 ## 🚀 Deployment
 
@@ -223,6 +235,7 @@ This project is based on the [Audiophile E-commerce Figma Design](https://www.fi
 ## 🔒 Features Breakdown
 
 ### Shopping Cart
+
 - Add/remove items
 - Update quantities
 - Persistent storage (localStorage)
@@ -230,6 +243,7 @@ This project is based on the [Audiophile E-commerce Figma Design](https://www.fi
 - Shipping & tax calculations
 
 ### Checkout Process
+
 1. **Form Validation**
    - Name, email, phone validation
    - Address validation
@@ -249,6 +263,7 @@ This project is based on the [Audiophile E-commerce Figma Design](https://www.fi
    - Show totals breakdown
 
 ### Product Pages
+
 - Dynamic routing by slug
 - Image galleries
 - Product features

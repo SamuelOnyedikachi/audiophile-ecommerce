@@ -64,15 +64,15 @@ export default function SpeakersPage() {
             />
             <div className="flex flex-col items-center md:items-start text-center md:text-left max-w-md">
               {p.new && (
-                <p className="uppercase text-[#d87d4a] tracking-[0.3em] mb-4">
+                <p className="uppercase text-md text-[#d87d4a] tracking-[0.3em] mb-4">
                   New Product
                 </p>
               )}
-              <h2 className="text-3xl font-bold uppercase mb-6">{p.name}</h2>
+              <h2 className="text-4xl font-bold uppercase mb-6">{p.name}</h2>
               <p className="text-gray-600 mb-8 leading-relaxed">
                 {p.description}
               </p>
-              <a href={p.href} className="btn">
+              <a href={p.href} className="p-3 btn">
                 See Product
               </a>
             </div>

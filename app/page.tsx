@@ -109,10 +109,10 @@ export default function Home() {
       </section>
 
       {/* === FEATURED PRODUCTS === */}
-      <section className="max-w-7xl mx-auto px-6 md:px-10 py-20 space-y-16">
+      <section className="max-w-7xl mx-auto px-6 md:px-10 py-20 space-y-36">
         {/* ZX9 SPEAKER */}
-        <div className="bg-[#d87d4a] rounded-2xl flex flex-col md:flex-row items-center text-white px-8 md:px-16 overflow-hidden relative text-center md:text-left">
-          <div className="flex justify-center md:justify-start w-full md:w-auto mb-10 md:mb-0">
+        <div className="bg-[#d87d4a] rounded-2xl flex flex-col md:flex-row items-center py-10  text-white px-8 md:px-16 overflow-hidden relative text-center md:text-left">
+          <div className="flex justify-center md:justify-start w-full md:w-auto mb-10  md:mb-0">
             <Image
               src="/images/home/desktop/image-speaker-zx9.png"
               alt="ZX9 Speaker"
