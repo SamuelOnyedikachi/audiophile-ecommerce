@@ -14,7 +14,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'orderId required' }, { status: 400 });
     }
 
-    // Use the Convex query to fetch the order
+    // Fetch the order using Convex
     const order = await convex.query(api.orders.getOrder, {
       orderId: orderId as any,
     });
@@ -23,7 +23,10 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ _id: orderId, ...order });
+    // Remove _id from order to avoid duplicate
+    const { _id, ...rest } = order;
+
+    return NextResponse.json({ _id: orderId, ...rest });
   } catch (err) {
     console.error('Error fetching order:', err);
     return NextResponse.json(
