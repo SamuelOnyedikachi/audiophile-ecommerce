@@ -20,6 +20,7 @@ type Order = {
   status: string;
   tracking?: any;
   deliveryConfirmed?: boolean;
+  createdAt: string;
 };
 
 /* -------------------- UTIL: SEND EMAIL VIA BREVO -------------------- */
@@ -247,28 +248,182 @@ export const sendOrderConfirmation = action({
 
     console.log('✅ Order found:', order.customer.email);
 
+    // Build items rows for table
+    const itemsRows = order.items
+      .map(
+        (item) => `
+        <tr>
+          <td style="padding: 12px 8px; border-bottom: 1px solid #f0f0f0;">
+            ${item.name}
+          </td>
+          <td style="padding: 12px 8px; border-bottom: 1px solid #f0f0f0; text-align: center;">
+            ${item.qty}
+          </td>
+          <td style="padding: 12px 8px; border-bottom: 1px solid #f0f0f0; text-align: right;">
+            ${item.price.toFixed(2)}
+          </td>
+          <td style="padding: 12px 8px; border-bottom: 1px solid #f0f0f0; text-align: right; font-weight: 600;">
+            ${(item.price * item.qty).toFixed(2)}
+          </td>
+        </tr>
+      `
+      )
+      .join('');
+
     const html = `
-      <div style="font-family:Arial,sans-serif;color:#333;">
-        <h2>Hi ${order.customer.name},</h2>
-        <p>Thank you for your order! Here's your summary:</p>
-        <ul>
-          ${order.items
-            .map(
-              (item) =>
-                `<li>${item.name} × ${item.qty} — $${(
-                  item.price * item.qty
-                ).toFixed(2)}</li>`
-            )
-            .join('')}
-        </ul>
-        <p><strong>Total:</strong> $${order.totals.total.toFixed(2)}</p>
-        <p><strong>Shipping address:</strong><br/>
-          ${order.shipping.address}, ${order.shipping.city}, ${order.shipping.country}
-        </p>
-        <hr/>
-        <p>We'll notify you when your order ships.</p>
-        <p>— The Audiophile Team</p>
-      </div>
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #d87d4a; padding: 40px 40px 30px; text-align: center;">
+                    <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 600; letter-spacing: 2px;">
+                      AUDIOPHILE
+                    </h1>
+                  </td>
+                </tr>
+
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px;">
+                    <h2 style="margin: 0 0 16px; color: #333333; font-size: 24px; font-weight: 600;">
+                      Hi ${order.customer.name},
+                    </h2>
+                    <p style="margin: 0 0 24px; color: #666666; font-size: 16px; line-height: 1.5;">
+                      Thank you for your order! Here's a summary of your purchase:
+                    </p>
+
+                    <!-- Order Details -->
+                    <div style="background-color: #f9f9f9; border-radius: 6px; padding: 20px; margin-bottom: 24px;">
+                      <p style="margin: 0 0 8px; color: #666666; font-size: 14px;">
+                        <strong style="color: #333333;">Order ID:</strong> ${args.orderId}
+                      </p>
+                      <p style="margin: 0; color: #666666; font-size: 14px;">
+                        <strong style="color: #333333;">Order Date:</strong> ${new Date(order.createdAt).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </p>
+                    </div>
+
+                    <!-- Order Items Table -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden;">
+                      <thead>
+                        <tr style="background-color: #f9f9f9;">
+                          <th style="padding: 12px 8px; text-align: left; font-size: 12px; font-weight: 600; color: #666666; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Product
+                          </th>
+                          <th style="padding: 12px 8px; text-align: center; font-size: 12px; font-weight: 600; color: #666666; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Qty
+                          </th>
+                          <th style="padding: 12px 8px; text-align: right; font-size: 12px; font-weight: 600; color: #666666; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Price
+                          </th>
+                          <th style="padding: 12px 8px; text-align: right; font-size: 12px; font-weight: 600; color: #666666; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Total
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${itemsRows}
+                      </tbody>
+                    </table>
+
+                    <!-- Order Summary -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
+                      <tr>
+                        <td style="padding: 8px 0; color: #666666; font-size: 15px;">
+                          Subtotal
+                        </td>
+                        <td style="padding: 8px 0; text-align: right; color: #333333; font-size: 15px;">
+                          ${order.totals.subtotal.toFixed(2)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0; color: #666666; font-size: 15px;">
+                          Shipping
+                        </td>
+                        <td style="padding: 8px 0; text-align: right; color: #333333; font-size: 15px;">
+                          ${order.totals.shipping.toFixed(2)}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px 0; color: #666666; font-size: 15px;">
+                          Taxes
+                        </td>
+                        <td style="padding: 8px 0; text-align: right; color: #333333; font-size: 15px;">
+                          ${order.totals.taxes.toFixed(2)}
+                        </td>
+                      </tr>
+                      <tr style="border-top: 2px solid #e0e0e0;">
+                        <td style="padding: 16px 0 0; color: #333333; font-size: 18px; font-weight: 600;">
+                          Grand Total
+                        </td>
+                        <td style="padding: 16px 0 0; text-align: right; color: #d87d4a; font-size: 20px; font-weight: 700;">
+                          ${order.totals.total.toFixed(2)}
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Shipping Address -->
+                    <div style="background-color: #f9f9f9; border-radius: 6px; padding: 20px; margin-bottom: 24px;">
+                      <h3 style="margin: 0 0 12px; color: #333333; font-size: 16px; font-weight: 600;">
+                        Shipping Address
+                      </h3>
+                      <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.6;">
+                        ${order.customer.name}<br/>
+                        ${order.shipping.address}<br/>
+                        ${order.shipping.city}, ${order.shipping.zipcode}<br/>
+                        ${order.shipping.country}
+                      </p>
+                    </div>
+
+                    <p style="margin: 0 0 16px; color: #666666; font-size: 14px; line-height: 1.5;">
+                      We'll send you a shipping confirmation email as soon as your order ships.
+                    </p>
+
+                    <!-- Track Order Button -->
+                    <table cellpadding="0" cellspacing="0" style="margin: 24px 0;">
+                      <tr>
+                        <td style="background-color: #d87d4a; border-radius: 6px; text-align: center;">
+                          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/track-order" 
+                             style="display: inline-block; padding: 14px 32px; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; letter-spacing: 0.5px;">
+                            TRACK YOUR ORDER
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                  <td style="background-color: #f9f9f9; padding: 32px 40px; text-align: center; border-top: 1px solid #e0e0e0;">
+                    <p style="margin: 0 0 8px; color: #999999; font-size: 13px;">
+                      Need help? Contact us at <a href="mailto:velionsystems@gmail.com" style="color: #d87d4a; text-decoration: none;">velionsystems@gmail.com</a>
+                    </p>
+                    <p style="margin: 0; color: #999999; font-size: 12px;">
+                      © ${new Date().getFullYear()} Audiophile. All rights reserved.
+                    </p>
+                  </td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
     `;
 
     try {
@@ -366,32 +521,160 @@ export const sendTrackingUpdateEmail = action({
 
     console.log('✅ Order found:', order.customer.email);
 
+    // Status emoji
+    const statusEmoji: Record<string, string> = {
+      pending: '⏳',
+      processing: '📦',
+      shipped: '🚚',
+      'in-transit': '✈️',
+      'out-for-delivery': '🚗',
+      delivered: '✅',
+    };
+
     const html = `
-      <div style="font-family:Arial,sans-serif;color:#333;max-width:600px;margin:0 auto;">
-        <h2 style="color:#d87d4a;">Hi ${order.customer.name},</h2>
-        <p>Your order status has been updated:</p>
-        <div style="background:#f7f7f7;padding:15px;border-radius:8px;margin:15px 0;">
-          <p><strong>Status:</strong> ${args.update.status}</p>
-          <p><strong>Location:</strong> ${args.update.location}</p>
-          <p><strong>Details:</strong> ${args.update.description}</p>
-          <p><strong>Time:</strong> ${new Date(
-            args.update.timestamp
-          ).toLocaleString()}</p>
-        </div>
-        <p>Track your order here:</p>
-        <a href="${
-          process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-        }/track-order" 
-           style="display:inline-block;background:#d87d4a;color:#fff;padding:10px 20px;
-                  border-radius:5px;text-decoration:none;">Track Order</a>
-        <p style="margin-top:20px;">— The Audiophile Team</p>
-      </div>
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #d87d4a; padding: 40px 40px 30px; text-align: center;">
+                    <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 600; letter-spacing: 2px;">
+                      AUDIOPHILE
+                    </h1>
+                  </td>
+                </tr>
+
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px;">
+                    <h2 style="margin: 0 0 16px; color: #333333; font-size: 24px; font-weight: 600;">
+                      Hi ${order.customer.name},
+                    </h2>
+                    <p style="margin: 0 0 24px; color: #666666; font-size: 16px; line-height: 1.5;">
+                      Your order status has been updated! Here are the latest details:
+                    </p>
+
+                    <!-- Status Update Box -->
+                    <div style="background: linear-gradient(135deg, #d87d4a 0%, #fbaf85 100%); border-radius: 8px; padding: 24px; margin-bottom: 24px; text-align: center;">
+                      <div style="font-size: 48px; margin-bottom: 12px;">
+                        ${statusEmoji[args.update.status] || '📦'}
+                      </div>
+                      <h3 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                        ${args.update.status.replace('-', ' ')}
+                      </h3>
+                    </div>
+
+                    <!-- Update Details -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9f9f9; border-radius: 6px; margin-bottom: 24px;">
+                      <tr>
+                        <td style="padding: 20px;">
+                          <table width="100%" cellpadding="8" cellspacing="0">
+                            <tr>
+                              <td style="color: #999999; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
+                                Location
+                              </td>
+                              <td style="color: #333333; font-size: 15px; text-align: right;">
+                                ${args.update.location}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style="color: #999999; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; padding-top: 12px;">
+                                Updated
+                              </td>
+                              <td style="color: #333333; font-size: 15px; text-align: right; padding-top: 12px;">
+                                ${new Date(args.update.timestamp).toLocaleString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric',
+                                  year: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </td>
+                            </tr>
+                          </table>
+                          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e0e0e0;">
+                            <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.6;">
+                              ${args.update.description}
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Order Summary -->
+                    <div style="background-color: #f9f9f9; border-radius: 6px; padding: 20px; margin-bottom: 24px;">
+                      <h3 style="margin: 0 0 12px; color: #333333; font-size: 16px; font-weight: 600;">
+                        Order Summary
+                      </h3>
+                      <p style="margin: 0 0 4px; color: #666666; font-size: 14px;">
+                        <strong style="color: #333333;">Order ID:</strong> ${args.orderId}
+                      </p>
+                      <p style="margin: 0 0 4px; color: #666666; font-size: 14px;">
+                        <strong style="color: #333333;">Total:</strong> ${order.totals.total.toFixed(2)}
+                      </p>
+                      ${order.tracking?.carrier ? `
+                      <p style="margin: 0 0 4px; color: #666666; font-size: 14px;">
+                        <strong style="color: #333333;">Carrier:</strong> ${order.tracking.carrier}
+                      </p>
+                      ` : ''}
+                      ${order.tracking?.trackingNumber ? `
+                      <p style="margin: 0; color: #666666; font-size: 14px;">
+                        <strong style="color: #333333;">Tracking #:</strong> ${order.tracking.trackingNumber}
+                      </p>
+                      ` : ''}
+                    </div>
+
+                    <!-- Track Order Button -->
+                    <table cellpadding="0" cellspacing="0" style="margin: 24px 0;">
+                      <tr>
+                        <td style="background-color: #d87d4a; border-radius: 6px; text-align: center;">
+                          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/track-order" 
+                             style="display: inline-block; padding: 14px 32px; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; letter-spacing: 0.5px;">
+                            VIEW FULL TRACKING DETAILS
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <p style="margin: 24px 0 0; color: #999999; font-size: 13px; line-height: 1.6;">
+                      You can track your order anytime by entering your email at our tracking page.
+                    </p>
+                  </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                  <td style="background-color: #f9f9f9; padding: 32px 40px; text-align: center; border-top: 1px solid #e0e0e0;">
+                    <p style="margin: 0 0 8px; color: #999999; font-size: 13px;">
+                      Need help? Contact us at <a href="mailto:velionsystems@gmail.com" style="color: #d87d4a; text-decoration: none;">velionsystems@gmail.com</a>
+                    </p>
+                    <p style="margin: 0; color: #999999; font-size: 12px;">
+                      © ${new Date().getFullYear()} Audiophile. All rights reserved.
+                    </p>
+                  </td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
     `;
 
     try {
       await sendBrevoEmail({
         to: order.customer.email,
-        subject: `Order Update — ${args.update.status}`,
+        subject: `Order Update — ${args.update.status.toUpperCase().replace('-', ' ')}`,
         html,
       });
       console.log('✅ ✨ Tracking update email sent successfully!');
