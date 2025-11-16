@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
 import Link from 'next/link';
 import { Truck, MapPin, CheckCircle } from 'lucide-react';
 
@@ -24,7 +25,7 @@ export default function TrackOrderPage() {
 
   const handleConfirmDelivery = async (orderId: string) => {
     try {
-      await confirmDelivery({ orderId });
+      await confirmDelivery({ orderId: orderId as Id<'orders'> });
       alert('✅ Delivery confirmed successfully!');
     } catch (err) {
       console.error(err);

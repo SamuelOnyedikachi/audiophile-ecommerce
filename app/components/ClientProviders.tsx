@@ -2,6 +2,7 @@
 
 import { ConvexProvider, ConvexReactClient } from 'convex/react';
 import { CartProvider } from './CartProvider';
+import AuthProvider from './AuthProvider';
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -12,7 +13,9 @@ export default function ClientProviders({
 }) {
   return (
     <ConvexProvider client={convex}>
-      <CartProvider>{children}</CartProvider>
+      <AuthProvider>
+        <CartProvider>{children}</CartProvider>
+      </AuthProvider>
     </ConvexProvider>
   );
 }

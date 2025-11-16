@@ -3,12 +3,15 @@
 import { useParams } from 'next/navigation';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Truck, CheckCircle } from 'lucide-react';
 
 export default function OrderDetailsPage() {
   const { id } = useParams();
-  const order = useQuery(api.orders.getOrderById, { id: id as string });
+  const order = useQuery(api.orders.getOrder, {
+    orderId: id as Id<'orders'>,
+  });
 
   if (!order)
     return (
@@ -31,7 +34,7 @@ export default function OrderDetailsPage() {
           <h1 className="text-2xl font-semibold mb-2">
             Order <span className="text-orange-400">#{order._id}</span>
           </h1>
-          <p className="text-gray-400 mb-6">{order.email}</p>
+          <p className="text-gray-400 mb-6">{order.customer.email}</p>
 
           {/* Status */}
           <div className="flex items-center justify-between mb-6">
@@ -55,19 +58,26 @@ export default function OrderDetailsPage() {
           <div className="mb-6">
             <h2 className="text-lg font-semibold mb-2">Items</h2>
             <ul className="space-y-2">
-              {order.items.map((item: any) => (
-                <li
-                  key={item.id}
-                  className="flex justify-between border-b border-white/5 pb-2 text-sm"
-                >
-                  <span>
-                    {item.name} × {item.qty}
-                  </span>
-                  <span className="font-semibold">
-                    ₦{item.price.toLocaleString()}
-                  </span>
-                </li>
-              ))}
+              {order.items.map(
+                (item: {
+                  id: string;
+                  name: string;
+                  qty: number;
+                  price: number;
+                }) => (
+                  <li
+                    key={item.id}
+                    className="flex justify-between border-b border-white/5 pb-2 text-sm"
+                  >
+                    <span>
+                      {item.name} × {item.qty}
+                    </span>
+                    <span className="font-semibold">
+                      ₦{item.price.toLocaleString()}
+                    </span>
+                  </li>
+                )
+              )}
             </ul>
           </div>
 
@@ -90,20 +100,29 @@ export default function OrderDetailsPage() {
             </p>
 
             {/* Tracking history */}
-            {order.tracking?.history?.length > 0 && (
+            {order.tracking?.history && order.tracking.history.length > 0 && (
               <div className="border-l border-gray-700 pl-4 space-y-2">
-                {order.tracking.history.map((step: any, i: number) => (
-                  <div key={i}>
-                    <div className="flex items-center gap-2">
-                      <MapPin size={14} className="text-orange-500" />
-                      <span className="text-gray-300">{step.status}</span>
+                {order.tracking.history.map(
+                  (
+                    step: {
+                      status: string;
+                      location: string;
+                      timestamp: string;
+                    },
+                    i: number
+                  ) => (
+                    <div key={i}>
+                      <div className="flex items-center gap-2">
+                        <MapPin size={14} className="text-orange-500" />
+                        <span className="text-gray-300">{step.status}</span>
+                      </div>
+                      <p className="ml-6 text-xs text-gray-500">
+                        {step.location} •{' '}
+                        {new Date(step.timestamp).toLocaleString()}
+                      </p>
                     </div>
-                    <p className="ml-6 text-xs text-gray-500">
-                      {step.location} •{' '}
-                      {new Date(step.timestamp).toLocaleString()}
-                    </p>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             )}
           </div>

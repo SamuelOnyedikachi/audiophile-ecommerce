@@ -38,10 +38,12 @@ async function sendBrevoEmail({
   console.log('📝 Subject:', subject);
 
   const apiKey = process.env.BREVO_API_KEY;
-  
+
   if (!apiKey) {
     console.error('❌ CRITICAL: BREVO_API_KEY is not set!');
-    console.error('📝 Please add it in Convex Dashboard: Settings → Environment Variables');
+    console.error(
+      '📝 Please add it in Convex Dashboard: Settings → Environment Variables'
+    );
     throw new Error('Missing BREVO_API_KEY');
   }
 
@@ -199,7 +201,7 @@ export const createOrder = mutation({
   },
   handler: async (ctx, args) => {
     console.log('🛒 Creating new order...');
-    
+
     const id = await ctx.db.insert('orders', {
       ...args,
       tracking: {
@@ -208,8 +210,7 @@ export const createOrder = mutation({
             status: 'pending',
             location: 'Order Placed',
             timestamp: new Date().toISOString(),
-            description:
-              'Your order has been received and is being processed.',
+            description: 'Your order has been received and is being processed.',
           },
         ],
       },
@@ -308,10 +309,12 @@ export const sendOrderConfirmation = action({
                         <strong style="color: #333333;">Order ID:</strong> ${args.orderId}
                       </p>
                       <p style="margin: 0; color: #666666; font-size: 14px;">
-                        <strong style="color: #333333;">Order Date:</strong> ${new Date(order.createdAt).toLocaleDateString('en-US', { 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric' 
+                        <strong style="color: #333333;">Order Date:</strong> ${new Date(
+                          order.createdAt
+                        ).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
                         })}
                       </p>
                     </div>
@@ -340,7 +343,11 @@ export const sendOrderConfirmation = action({
                     </table>
 
                     <!-- Order Summary -->
-                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; table-layout: fixed;">
+                      <colgroup>
+                        <col style="width: auto;">
+                        <col style="width: auto;">
+                      </colgroup>
                       <tr>
                         <td style="padding: 8px 0; color: #666666; font-size: 15px;">
                           Subtotal
@@ -591,12 +598,14 @@ export const sendTrackingUpdateEmail = action({
                                 Updated
                               </td>
                               <td style="color: #333333; font-size: 15px; text-align: right; padding-top: 12px;">
-                                ${new Date(args.update.timestamp).toLocaleString('en-US', {
+                                ${new Date(
+                                  args.update.timestamp
+                                ).toLocaleString('en-US', {
                                   month: 'short',
                                   day: 'numeric',
                                   year: 'numeric',
                                   hour: '2-digit',
-                                  minute: '2-digit'
+                                  minute: '2-digit',
                                 })}
                               </td>
                             </tr>
@@ -621,16 +630,24 @@ export const sendTrackingUpdateEmail = action({
                       <p style="margin: 0 0 4px; color: #666666; font-size: 14px;">
                         <strong style="color: #333333;">Total:</strong> ${order.totals.total.toFixed(2)}
                       </p>
-                      ${order.tracking?.carrier ? `
+                      ${
+                        order.tracking?.carrier
+                          ? `
                       <p style="margin: 0 0 4px; color: #666666; font-size: 14px;">
                         <strong style="color: #333333;">Carrier:</strong> ${order.tracking.carrier}
                       </p>
-                      ` : ''}
-                      ${order.tracking?.trackingNumber ? `
+                      `
+                          : ''
+                      }
+                      ${
+                        order.tracking?.trackingNumber
+                          ? `
                       <p style="margin: 0; color: #666666; font-size: 14px;">
                         <strong style="color: #333333;">Tracking #:</strong> ${order.tracking.trackingNumber}
                       </p>
-                      ` : ''}
+                      `
+                          : ''
+                      }
                     </div>
 
                     <!-- Track Order Button -->

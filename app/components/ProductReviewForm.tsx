@@ -1,4 +1,3 @@
-
 // 'use client';
 
 // import { useState } from 'react';
@@ -155,67 +154,133 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
-import { v } from 'convex/values';
+import { Id } from '@/convex/_generated/dataModel';
 import { Star } from 'lucide-react';
 
 interface ProductReviewFormProps {
   productId: string;
-  productName: string;
-  orderId: string;
-  customerEmail: string;
+  productName?: string;
+  orderId?: string;
+  customerEmail?: string;
 }
 
 export default function ProductReviewForm({
   productId,
-  productName,
-  orderId,
-  customerEmail,
+  productName = '',
+  orderId = '',
+  customerEmail = '',
 }: ProductReviewFormProps) {
   const createReview = useMutation(api.orders.createReview);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [name, setName] = useState('');
+  const [email, setEmail] = useState(customerEmail);
   const [title, setTitle] = useState('');
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
 
-    if (!rating || !title || !comment || !name) {
-      alert('Please fill in all fields and select a rating.');
+    // Validate required fields
+    if (!rating || !title || !comment || !name || !email) {
+      setError('Please fill in all fields and select a rating.');
+      return;
+    }
+
+    // If orderId is missing, show message to user
+    if (!orderId) {
+      setError(
+        'You must have an order to submit a review. Please complete a purchase first.'
+      );
       return;
     }
 
     setLoading(true);
 
     try {
-      await createReview({
-        orderId: v.id('orders', orderId), // cast string to Convex ID
+      console.log('📝 Submitting review with data:', {
+        orderId,
         productId,
         productName,
         customerName: name,
-        customerEmail,
-        rating: Number(rating), // ensure float64
+        customerEmail: email,
+        rating: Number(rating),
         title,
         comment,
       });
+
+      const reviewData = {
+        orderId: orderId as unknown as Id<'orders'>,
+        productId,
+        productName,
+        customerName: name,
+        customerEmail: email,
+        rating: Number(rating),
+        title,
+        comment,
+      };
+
+      await createReview(reviewData);
 
       setSuccess(true);
       setRating(0);
       setTitle('');
       setComment('');
       setName('');
+      setEmail('');
+      console.log('✅ Review submitted successfully!');
+
+      // Clear success message after 5 seconds
+      setTimeout(() => setSuccess(false), 5000);
     } catch (error) {
-      console.error('Failed to submit review:', error);
-      alert('Failed to submit review. Please try again.');
+      console.error('❌ Failed to submit review:', error);
+
+      // Provide detailed error message
+      let errorMessage = 'Failed to submit review. ';
+      if (error instanceof Error) {
+        errorMessage += error.message;
+        console.error('Error details:', {
+          name: error.name,
+          message: error.message,
+          stack: error.stack,
+        });
+      }
+
+      setError(
+        errorMessage + ' Please check the browser console for more details.'
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  // If user hasn't completed an order, show limited info
+  if (!orderId || !customerEmail) {
+    return (
+      <div className="mt-12 bg-gray-50 border border-gray-300 rounded-2xl p-8 shadow-sm">
+        <h3 className="text-xl font-semibold mb-4 text-center md:text-left">
+          Write a Review
+        </h3>
+        <p className="text-gray-600 text-center md:text-left">
+          You must complete a purchase to leave a review.
+          <Link
+            href="/checkout"
+            className="text-[#d87d4a] font-semibold hover:underline"
+          >
+            {' '}
+            Start shopping
+          </Link>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-12 bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
@@ -228,6 +293,8 @@ export default function ProductReviewForm({
           ✅ Review submitted successfully! It will appear shortly.
         </p>
       )}
+
+      {error && <p className="text-red-600 mb-4 text-sm">❌ {error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Name */}
