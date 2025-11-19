@@ -8,7 +8,15 @@
  * @module
  */
 
+import type * as analytics from "../analytics.js";
+import type * as auth from "../auth.js";
+import type * as authHelpers from "../authHelpers.js";
+import type * as customers from "../customers.js";
+import type * as migrations from "../migrations.js";
 import type * as orders from "../orders.js";
+import type * as products from "../products.js";
+import type * as users from "../users.js";
+import type * as vendors from "../vendors.js";
 
 import type {
   ApiFromModules,
@@ -25,7 +33,15 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  analytics: typeof analytics;
+  auth: typeof auth;
+  authHelpers: typeof authHelpers;
+  customers: typeof customers;
+  migrations: typeof migrations;
   orders: typeof orders;
+  products: typeof products;
+  users: typeof users;
+  vendors: typeof vendors;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 

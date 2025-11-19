@@ -2,6 +2,7 @@
 import { mutation, query, action } from './_generated/server';
 import { v } from 'convex/values';
 import { api } from './_generated/api';
+import { requireAdmin } from './authHelpers';
 
 /* -------------------- TYPES -------------------- */
 type OrderItem = {
@@ -18,7 +19,19 @@ type Order = {
   items: OrderItem[];
   totals: { subtotal: number; shipping: number; taxes: number; total: number };
   status: string;
-  tracking?: any;
+  tracking?: {
+    trackingNumber?: string;
+    carrier?: string;
+    currentLocation?: string;
+    estimatedDelivery?: string;
+    lastUpdated?: string;
+    history?: Array<{
+      status: string;
+      location: string;
+      timestamp: string;
+      description: string;
+    }>;
+  };
   deliveryConfirmed?: boolean;
   createdAt: string;
 };
@@ -35,14 +48,14 @@ async function sendBrevoEmail({
 }) {
   console.log('🔔 sendBrevoEmail called');
   console.log('📧 Recipient:', to);
-  console.log('📝 Subject:', subject);
+  console.log('  Subject:', subject);
 
   const apiKey = process.env.BREVO_API_KEY;
 
   if (!apiKey) {
     console.error('❌ CRITICAL: BREVO_API_KEY is not set!');
     console.error(
-      '📝 Please add it in Convex Dashboard: Settings → Environment Variables'
+      '  Please add it in Convex Dashboard: Settings → Environment Variables'
     );
     throw new Error('Missing BREVO_API_KEY');
   }
@@ -261,10 +274,10 @@ export const sendOrderConfirmation = action({
             ${item.qty}
           </td>
           <td style="padding: 12px 8px; border-bottom: 1px solid #f0f0f0; text-align: right;">
-            ${item.price.toFixed(2)}
+            $${item.price.toFixed(2)}
           </td>
           <td style="padding: 12px 8px; border-bottom: 1px solid #f0f0f0; text-align: right; font-weight: 600;">
-            ${(item.price * item.qty).toFixed(2)}
+            $${(item.price * item.qty).toFixed(2)}
           </td>
         </tr>
       `
@@ -342,42 +355,44 @@ export const sendOrderConfirmation = action({
                       </tbody>
                     </table>
 
-                    <!-- Order Summary -->
-                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; table-layout: fixed;">
-                      <colgroup>
-                        <col style="width: auto;">
-                        <col style="width: auto;">
-                      </colgroup>
+                    <!-- Order Summary (table-based for Outlook compatibility) -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; background-color: #ffffff; border-radius: 6px;">
                       <tr>
-                        <td style="padding: 8px 0; color: #666666; font-size: 15px;">
-                          Subtotal
-                        </td>
-                        <td style="padding: 8px 0; text-align: right; color: #333333; font-size: 15px;">
-                          ${order.totals.subtotal.toFixed(2)}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 8px 0; color: #666666; font-size: 15px;">
-                          Shipping
-                        </td>
-                        <td style="padding: 8px 0; text-align: right; color: #333333; font-size: 15px;">
-                          ${order.totals.shipping.toFixed(2)}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 8px 0; color: #666666; font-size: 15px;">
-                          Taxes
-                        </td>
-                        <td style="padding: 8px 0; text-align: right; color: #333333; font-size: 15px;">
-                          ${order.totals.taxes.toFixed(2)}
-                        </td>
-                      </tr>
-                      <tr style="border-top: 2px solid #e0e0e0;">
-                        <td style="padding: 16px 0 0; color: #333333; font-size: 18px; font-weight: 600;">
-                          Grand Total
-                        </td>
-                        <td style="padding: 16px 0 0; text-align: right; color: #d87d4a; font-size: 20px; font-weight: 700;">
-                          ${order.totals.total.toFixed(2)}
+                        <td style="padding: 12px; text-align: left;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="padding: 8px 0; color: #666666; font-size: 15px; width: 60%;">
+                                Subtotal
+                              </td>
+                              <td style="padding: 8px 0; color: #333333; font-size: 15px; text-align: right; width: 40%; font-weight: 500;">
+                                $${order.totals.subtotal.toFixed(2)}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style="padding: 8px 0; color: #666666; font-size: 15px; width: 60%;">
+                                Shipping
+                              </td>
+                              <td style="padding: 8px 0; color: #333333; font-size: 15px; text-align: right; width: 40%; font-weight: 500;">
+                                $${order.totals.shipping.toFixed(2)}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style="padding: 8px 0; color: #666666; font-size: 15px; width: 60%;">
+                                Taxes
+                              </td>
+                              <td style="padding: 8px 0; color: #333333; font-size: 15px; text-align: right; width: 40%; font-weight: 500;">
+                                $${order.totals.taxes.toFixed(2)}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style="padding: 16px 0 0; border-top: 2px solid #e0e0e0; color: #333333; font-size: 18px; font-weight: 600; width: 60%;">
+                                Grand Total
+                              </td>
+                              <td style="padding: 16px 0 0; border-top: 2px solid #e0e0e0; color: #d87d4a; font-size: 20px; font-weight: 700; text-align: right; width: 40%;">
+                                $${order.totals.total.toFixed(2)}
+                              </td>
+                            </tr>
+                          </table>
                         </td>
                       </tr>
                     </table>
@@ -457,8 +472,13 @@ export const updateOrderTracking = mutation({
     currentLocation: v.string(),
     estimatedDelivery: v.optional(v.string()),
     description: v.string(),
+    userId: v.id('users'),
   },
   handler: async (ctx, args) => {
+    // Verify user is admin
+    const user = await ctx.db.get(args.userId);
+    requireAdmin(user);
+
     console.log('🚚 Updating order tracking...');
     console.log('📦 Order ID:', args.orderId);
     console.log('📍 New status:', args.status);
@@ -620,37 +640,42 @@ export const sendTrackingUpdateEmail = action({
                     </table>
 
                     <!-- Order Summary -->
+                    <!-- Order Summary (table-based for Outlook compatibility) -->
                     <div style="background-color: #f9f9f9; border-radius: 6px; padding: 20px; margin-bottom: 24px;">
                       <h3 style="margin: 0 0 12px; color: #333333; font-size: 16px; font-weight: 600;">
                         Order Summary
                       </h3>
-                      <p style="margin: 0 0 4px; color: #666666; font-size: 14px;">
-                        <strong style="color: #333333;">Order ID:</strong> ${args.orderId}
-                      </p>
-                      <p style="margin: 0 0 4px; color: #666666; font-size: 14px;">
-                        <strong style="color: #333333;">Total:</strong> ${order.totals.total.toFixed(2)}
-                      </p>
-                      ${
-                        order.tracking?.carrier
-                          ? `
-                      <p style="margin: 0 0 4px; color: #666666; font-size: 14px;">
-                        <strong style="color: #333333;">Carrier:</strong> ${order.tracking.carrier}
-                      </p>
-                      `
-                          : ''
-                      }
-                      ${
-                        order.tracking?.trackingNumber
-                          ? `
-                      <p style="margin: 0; color: #666666; font-size: 14px;">
-                        <strong style="color: #333333;">Tracking #:</strong> ${order.tracking.trackingNumber}
-                      </p>
-                      `
-                          : ''
-                      }
-                    </div>
-
-                    <!-- Track Order Button -->
+                      <table width="100%" cellpadding="0" cellspacing="0" style="margin: 0;">
+                        <tr>
+                          <td style="padding: 8px 0; color: #666666; font-size: 14px; width: 60%;">Order ID:</td>
+                          <td style="padding: 8px 0; color: #333333; font-size: 14px; text-align: right; width: 40%; font-weight: 500;">${args.orderId}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; color: #666666; font-size: 14px; width: 60%;">Total:</td>
+                          <td style="padding: 8px 0; color: #333333; font-size: 14px; text-align: right; width: 40%; font-weight: 500;">$${order.totals.total.toFixed(2)}</td>
+                        </tr>
+                        ${
+                          order.tracking?.carrier
+                            ? `
+                        <tr>
+                          <td style="padding: 8px 0; color: #666666; font-size: 14px; width: 60%;">Carrier:</td>
+                          <td style="padding: 8px 0; color: #333333; font-size: 14px; text-align: right; width: 40%; font-weight: 500;">${order.tracking.carrier}</td>
+                        </tr>
+                        `
+                            : ''
+                        }
+                        ${
+                          order.tracking?.trackingNumber
+                            ? `
+                        <tr>
+                          <td style="padding: 8px 0; color: #666666; font-size: 14px; width: 60%;">Tracking #:</td>
+                          <td style="padding: 8px 0; color: #333333; font-size: 14px; text-align: right; width: 40%; font-weight: 500;">${order.tracking.trackingNumber}</td>
+                        </tr>
+                        `
+                            : ''
+                        }
+                      </table>
+                    </div>                    <!-- Track Order Button -->
                     <table cellpadding="0" cellspacing="0" style="margin: 24px 0;">
                       <tr>
                         <td style="background-color: #d87d4a; border-radius: 6px; text-align: center;">

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useCart } from './CartProvider';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { toast } from 'react-toastify';
 
 type FormData = {
   name: string;
@@ -33,8 +34,28 @@ export default function CheckoutForm() {
     country: '',
   });
 
+  const [paymentMethod, setPaymentMethod] = useState('credit-card');
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [cardDetails, setCardDetails] = useState({
+    cardName: '',
+    cardNumber: '',
+    expiryDate: '',
+    cvc: '',
+  });
+  const [selectedBank, setSelectedBank] = useState('');
+
+  const banks = [
+    { id: 'gtb', name: 'Guaranty Trust Bank (GTB)', code: '044' },
+    { id: 'access', name: 'Access Bank', code: '044' },
+    { id: 'firstbank', name: 'First Bank', code: '011' },
+    { id: 'zenith', name: 'Zenith Bank', code: '057' },
+    { id: 'uba', name: 'United Bank for Africa (UBA)', code: '033' },
+    { id: 'stanbic', name: 'Stanbic IBTC', code: '221' },
+    { id: 'opay', name: 'Opay', code: '999992' },
+    { id: 'palmpay', name: 'Palmpay', code: '999999' },
+    { id: 'moniepoint', name: 'Moniepoint', code: '50150' },
+  ];
 
   const shipping = subtotal > 0 ? 25 : 0;
   const taxes = Math.round(subtotal * 0.07);
@@ -80,11 +101,37 @@ export default function CheckoutForm() {
     e.preventDefault();
 
     if (items.length === 0) {
-      alert('Your cart is empty!');
+      const msg = '🛒 Add items to your cart to proceed with checkout.';
+      console.error(' Checkout Error:', msg);
+      toast.warning(msg);
       return;
     }
 
     if (!validateForm()) {
+      const msg = 'Please complete all required fields to continue.';
+      console.error('❌ Form Validation Error:', msg);
+      toast.warning(msg);
+      return;
+    }
+
+    // Validate payment method specific requirements
+    if (
+      paymentMethod === 'credit-card' &&
+      (!cardDetails.cardName ||
+        !cardDetails.cardNumber ||
+        !cardDetails.expiryDate ||
+        !cardDetails.cvc)
+    ) {
+      const msg = 'Please fill in all card details to continue.';
+      console.error('Card Details Error:', msg);
+      toast.warning(msg);
+      return;
+    }
+
+    if (paymentMethod === 'bank-transfer' && !selectedBank) {
+      const msg = '🏦 Please select a bank to continue.';
+      console.error('❌ Bank Selection Error:', msg);
+      toast.warning(msg);
       return;
     }
 
@@ -120,6 +167,15 @@ export default function CheckoutForm() {
         createdAt: new Date().toISOString(),
       });
 
+      // Log payment method info for reference
+      console.log('💳 Payment Method:', paymentMethod);
+      if (paymentMethod === 'credit-card') {
+        console.log('💳 Card last 4:', cardDetails.cardNumber.slice(-4));
+      }
+      if (paymentMethod === 'bank-transfer') {
+        console.log('🏦 Bank:', selectedBank);
+      }
+
       // Send confirmation email
       await fetch('/api/send-email', {
         method: 'POST',
@@ -130,11 +186,16 @@ export default function CheckoutForm() {
       // Clear cart
       clear();
 
+      console.log('✅ Order created successfully:', order._id);
+      toast.success(
+        ' Order placed successfully! Preparing your confirmation...'
+      );
+
       // Redirect to confirmation page
       router.push(`/confirmation?orderId=${order._id}`);
     } catch (error) {
-      console.error('Checkout error:', error);
-      alert('Something went wrong. Please try again.');
+      console.error(' Checkout error:', error);
+      toast.warning(' Please review your information and try again.');
     } finally {
       setSubmitting(false);
     }
@@ -308,10 +369,227 @@ export default function CheckoutForm() {
               )}
             </div>
 
+            <h3 className="text-xl font-bold mt-8 mb-4 uppercase tracking-wider">
+              Payment Method
+            </h3>
+
+            {/* Payment Method Selection */}
+            <div className="space-y-3">
+              <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-[#d87d4a] transition">
+                <input
+                  type="radio"
+                  name="payment"
+                  value="credit-card"
+                  checked={paymentMethod === 'credit-card'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-4 h-4 text-[#d87d4a] cursor-pointer"
+                />
+                <span className="ml-3 font-semibold">💳 Credit Card</span>
+              </label>
+
+              <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-[#d87d4a] transition">
+                <input
+                  type="radio"
+                  name="payment"
+                  value="Cash on Delivery"
+                  checked={paymentMethod === 'Cash on Delivery'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-4 h-4 text-[#d87d4a] cursor-pointer"
+                />
+                <span className="ml-3 font-semibold">💵 Cash on Delivery</span>
+              </label>
+
+              <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-[#d87d4a] transition">
+                <input
+                  type="radio"
+                  name="payment"
+                  value="bank-transfer"
+                  checked={paymentMethod === 'bank-transfer'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-4 h-4 text-[#d87d4a] cursor-pointer"
+                />
+                <span className="ml-3 font-semibold">🏦 Bank Transfer</span>
+              </label>
+
+              <label className="flex items-center p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-[#d87d4a] transition">
+                <input
+                  type="radio"
+                  name="payment"
+                  value="USSD"
+                  checked={paymentMethod === 'USSD'}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-4 h-4 text-[#d87d4a] cursor-pointer"
+                />
+                <span className="ml-3 font-semibold">📱 USSD</span>
+              </label>
+            </div>
+
+            {/* Credit Card Form */}
+            {paymentMethod === 'credit-card' && (
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-4">
+                <p className="text-sm text-blue-800 font-semibold">
+                  💳 Card Details
+                </p>
+
+                {/* Cardholder Name */}
+                <div>
+                  <label className="block text-sm font-semibold mb-2">
+                    Cardholder Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={cardDetails.cardName}
+                    onChange={(e) =>
+                      setCardDetails({
+                        ...cardDetails,
+                        cardName: e.target.value,
+                      })
+                    }
+                    placeholder="John Doe"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
+                  />
+                </div>
+
+                {/* Card Number */}
+                <div>
+                  <label className="block text-sm font-semibold mb-2">
+                    Card Number <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={cardDetails.cardNumber}
+                    onChange={(e) => {
+                      let value = e.target.value.replace(/\s/g, '');
+                      // Format as XXXX XXXX XXXX XXXX
+                      value = value.replace(/(\d{4})/g, '$1 ').trim();
+                      setCardDetails({
+                        ...cardDetails,
+                        cardNumber: value,
+                      });
+                    }}
+                    placeholder="4242 4242 4242 4242"
+                    maxLength={19}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a] font-mono"
+                  />
+                </div>
+
+                {/* Expiry & CVC */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      Expiry Date <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={cardDetails.expiryDate}
+                      onChange={(e) => {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length >= 2) {
+                          value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                        }
+                        setCardDetails({
+                          ...cardDetails,
+                          expiryDate: value,
+                        });
+                      }}
+                      placeholder="MM/YY"
+                      maxLength={5}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a] font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      CVC <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={cardDetails.cvc}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        setCardDetails({
+                          ...cardDetails,
+                          cvc: value.slice(0, 4),
+                        });
+                      }}
+                      placeholder="123"
+                      maxLength={4}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a] font-mono"
+                    />
+                  </div>
+                </div>
+
+                <p className="text-xs text-blue-700 mt-3">
+                  ℹ️ <strong>Demo Mode:</strong> Test card: 4242 4242 4242 4242
+                  with any future date and CVC.
+                </p>
+              </div>
+            )}
+
+            {/* Bank Transfer Options */}
+            {paymentMethod === 'bank-transfer' && (
+              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg space-y-4">
+                <p className="text-sm text-green-800 font-semibold">
+                  🏦 Select Your Bank
+                </p>
+
+                <div className="space-y-2">
+                  {banks.map((bank) => (
+                    <label
+                      key={bank.id}
+                      className="flex items-center p-3 border border-green-300 rounded-lg cursor-pointer hover:bg-green-100 transition"
+                    >
+                      <input
+                        type="radio"
+                        name="bank"
+                        value={bank.id}
+                        checked={selectedBank === bank.id}
+                        onChange={(e) => setSelectedBank(e.target.value)}
+                        className="w-4 h-4 text-[#d87d4a]"
+                      />
+                      <div className="ml-3">
+                        <p className="font-semibold text-sm">{bank.name}</p>
+                        <p className="text-xs text-gray-600">
+                          Sort Code: {bank.code}
+                        </p>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+
+                <div className="bg-white p-3 rounded border border-green-300 mt-4">
+                  <p className="text-xs text-gray-700">
+                    💡 <strong>Note:</strong> After completing this order, you
+                    will receive transfer details for the selected bank.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Cash on Delivery Info */}
+            {paymentMethod === 'Cash on Delivery' && (
+              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-sm text-yellow-800">
+                  💵 <strong>Cash on Delivery:</strong> You will pay the amount
+                  when the package is delivered to you.
+                </p>
+              </div>
+            )}
+
+            {/* USSD Info */}
+            {paymentMethod === 'USSD' && (
+              <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                <p className="text-sm text-purple-800">
+                  📱 <strong>USSD Payment:</strong> Dial the USSD code provided
+                  after order confirmation to complete your payment.
+                </p>
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-[#d87d4a] text-white py-4 rounded-lg font-semibold uppercase tracking-widest hover:bg-[#fbaf85] transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#d87d4a] text-white py-4 rounded-lg font-semibold uppercase tracking-widest hover:bg-[#fbaf85] transition disabled:opacity-50 disabled:cursor-not-allowed mt-6"
             >
               {submitting ? 'Processing...' : 'Continue & Pay'}
             </button>
@@ -326,7 +604,7 @@ export default function CheckoutForm() {
           <ul className="space-y-4 mb-6">
             {items.map((item) => (
               <li key={item.id} className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden shrink-0">
                   {item.image && (
                     <img
                       src={item.image}

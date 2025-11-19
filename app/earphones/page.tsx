@@ -69,7 +69,7 @@ export default function EarphonesPage() {
             <p className="text-gray-600 mb-8 leading-relaxed max-w-md">
               {product.description}
             </p>
-            <Link href={product.href} className="p-3 btn">
+            <Link href={product.href} className="p-3 rounded-lg btn">
               See Product
             </Link>
           </div>

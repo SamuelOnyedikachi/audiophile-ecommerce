@@ -32,7 +32,7 @@ export default function ProductCard({
       <p className="text-sm text-gray-500 mt-3 max-w-[28rem]">{description}</p>
       <Link
         href={href}
-        className={`mt-6 px-6 py-3 rounded tracking-wider text-sm font-semibold ${dark ? 'bg-orange-500 text-white' : 'border border-black hover:bg-black hover:text-white'}`}
+        className={`mt-6 px-6 py-3  tracking-wider text-sm rounded-lg font-semibold ${dark ? 'bg-orange-500 text-white' : 'border border-black hover:bg-black hover:text-white'}`}
       >
         See Product
       </Link>

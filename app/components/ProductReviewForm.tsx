@@ -159,6 +159,7 @@ import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import { Star } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 interface ProductReviewFormProps {
   productId: string;
@@ -190,22 +191,27 @@ export default function ProductReviewForm({
 
     // Validate required fields
     if (!rating || !title || !comment || !name || !email) {
-      setError('Please fill in all fields and select a rating.');
+      const msg = ' Please fill in all fields and select a rating to continue.';
+      setError(msg);
+      console.warn(' Review Validation:', msg);
+      toast.warning(msg);
       return;
     }
 
     // If orderId is missing, show message to user
     if (!orderId) {
-      setError(
-        'You must have an order to submit a review. Please complete a purchase first.'
-      );
+      const msg =
+        '📦 You must complete a purchase first to leave a review. Shop now!';
+      setError(msg);
+      console.warn(' No Order Found:', msg);
+      toast.info(msg);
       return;
     }
 
     setLoading(true);
 
     try {
-      console.log('📝 Submitting review with data:', {
+      console.log('  Submitting review with data:', {
         orderId,
         productId,
         productName,
@@ -236,6 +242,9 @@ export default function ProductReviewForm({
       setName('');
       setEmail('');
       console.log('✅ Review submitted successfully!');
+      toast.success(
+        '⭐ Thank you! Your review has been submitted and will appear shortly.'
+      );
 
       // Clear success message after 5 seconds
       setTimeout(() => setSuccess(false), 5000);
@@ -253,9 +262,11 @@ export default function ProductReviewForm({
         });
       }
 
-      setError(
-        errorMessage + ' Please check the browser console for more details.'
-      );
+      const fullMsg =
+        errorMessage + ' Please check the browser console for more details.';
+      setError(fullMsg);
+      console.error(' Review Submission Failed:', errorMessage);
+      toast.warning(' Could not submit your review. Please try again.');
     } finally {
       setLoading(false);
     }

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import AuthGuard from '@/app/components/AuthGuard';
+import { useAuthGuard } from '@/app/hooks/useAuthGuard';
 import { useCart } from '@/app/components/CartProvider';
 import { products } from '@/app/data/products';
 import ProductReviews from '@/app/components/ProductReviews';
@@ -14,6 +15,7 @@ export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { add } = useCart();
+  const { requireAuth } = useAuthGuard();
   const [qty, setQty] = useState(1);
 
   const product = products.find((p) => p.slug === params.slug);
@@ -31,17 +33,6 @@ export default function ProductDetailPage() {
       </div>
     );
   }
-
-  const handleAddToCart = () => {
-    add({
-      id: product.slug,
-      name: product.name,
-      price: product.price,
-      qty,
-      image: product.image,
-    });
-    alert('Added to cart!');
-  };
 
   const relatedProducts = products
     .filter((p) => p.category === product.category && p.id !== product.id)
@@ -118,7 +109,18 @@ export default function ProductDetailPage() {
                   </button>
                 </div>
                 <button
-                  onClick={handleAddToCart}
+                  onClick={() =>
+                    requireAuth(() => {
+                      add({
+                        id: product.slug,
+                        name: product.name,
+                        price: product.price,
+                        qty,
+                        image: product.image,
+                      });
+                      alert('Added to cart!');
+                    })
+                  }
                   className="bg-[#d87d4a] px-8 py-3 text-white font-semibold uppercase tracking-widest rounded hover:bg-[#fbaf85] transition"
                 >
                   Add to Cart
@@ -178,7 +180,7 @@ export default function ProductDetailPage() {
                   <h3 className="text-xl font-bold uppercase mb-4">{p.name}</h3>
                   <Link
                     href={`/product/${p.slug}`}
-                    className="bg-[#d87d4a] px-6 py-3 text-white font-semibold uppercase tracking-widest rounded hover:bg-[#fbaf85] transition inline-block"
+                    className="bg-[#d87d4a] px-6 py-3 text-white font-semibold uppercase tracking-widest rounded-lg hover:bg-[#fbaf85] transition inline-block"
                   >
                     See Product
                   </Link>

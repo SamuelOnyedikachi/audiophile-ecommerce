@@ -1,7 +1,9 @@
 'use client';
 
 import { useCart } from './CartProvider';
+import { useAuthGuard } from '@/app/hooks/useAuthGuard';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
 
 export default function Cart({
   setCartOpen,
@@ -9,6 +11,7 @@ export default function Cart({
   setCartOpen: (v: boolean) => void;
 }) {
   const { items, remove, updateQty, subtotal, clear } = useCart();
+  const { requireAuth } = useAuthGuard();
   const shipping = subtotal > 0 ? 25 : 0;
   const taxes = Math.round(subtotal * 0.07);
   const total = subtotal + shipping + taxes;
@@ -48,7 +51,7 @@ export default function Cart({
                   key={it.id}
                   className="flex items-center gap-4 border-b pb-4 last:border-none"
                 >
-                  <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                  <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden shrink-0">
                     {it.image && (
                       <img
                         src={it.image}
@@ -108,16 +111,21 @@ export default function Cart({
 
             {/* Buttons */}
             <div className="mt-6 space-y-3">
-              <Link
-                href="/checkout"
-                onClick={() => setCartOpen(false)}
-                className="block text-center bg-orange-600 text-white py-3 rounded-md hover:bg-orange-500 transition"
+              <button
+                onClick={() =>
+                  requireAuth(() => setCartOpen(false), '/checkout')
+                }
+                className="block w-full text-center bg-orange-600 text-white py-3 rounded-md hover:bg-orange-500 transition"
               >
                 Checkout
-              </Link>
+              </button>
 
               <button
-                onClick={() => clear()}
+                onClick={() => {
+                  console.log('🛒 Clear cart clicked');
+                  toast.info('🗑️ Cart cleared');
+                  clear();
+                }}
                 className="block w-full text-center text-sm text-gray-500 hover:text-gray-700"
               >
                 Clear Cart

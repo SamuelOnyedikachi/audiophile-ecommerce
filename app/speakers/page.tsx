@@ -72,7 +72,7 @@ export default function SpeakersPage() {
               <p className="text-gray-600 mb-8 leading-relaxed">
                 {p.description}
               </p>
-              <a href={p.href} className="p-3 btn">
+              <a href={p.href} className="p-3 rounded-lg btn">
                 See Product
               </a>
             </div>

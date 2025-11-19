@@ -110,7 +110,7 @@ export default function HeadphonesPage() {
               </p>
               <Link
                 href={p.href}
-                className="bg-[#d87d4a] px-6 py-3 text-sm md:text-base text-white font-semibold uppercase tracking-widest rounded hover:bg-[#fbaf85] transition"
+                className="bg-[#d87d4a] px-6 py-3 text-sm md:text-base text-white font-semibold uppercase tracking-widest rounded-lg hover:bg-[#fbaf85] transition"
               >
                 See Product
               </Link>
