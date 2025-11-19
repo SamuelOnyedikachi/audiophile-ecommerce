@@ -63,7 +63,7 @@ export default function Header() {
             >
               <ShoppingCart size={24} strokeWidth={1.5} />
               {items.length > 0 && (
-                <span className="absolute top-0 right-0 bg-[#d87d4a] text-white text-[10px] font-bold rounded-full w-2 h-2 flex items-center justify-center">
+                <span className="absolute top-0 right-0 bg-[#d87d4a] text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                   {items.length}
                 </span>
               )}
