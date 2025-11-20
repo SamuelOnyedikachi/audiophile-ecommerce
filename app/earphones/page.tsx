@@ -11,7 +11,6 @@ export default function EarphonesPage() {
     href: '/product/yx1-earphones',
   };
 
-
   const categories = [
     {
       title: 'Headphones',
@@ -30,12 +29,10 @@ export default function EarphonesPage() {
     },
   ];
 
-
-
   return (
     <main className="w-full">
       {/* Page Banner */}
-      <section className="bg-black text-white text-center py-16 md:py-24 uppercase tracking-[0.15em] md:tracking-[0.25em] text-2xl md:text-3xl font-bold">
+      <section className="bg-black text-white text-center py-16 md:py-24 uppercase tracking-[0.15em] md:tracking-[0.25em] text-xl md:text-2xl font-bold">
         Earphones
       </section>
 
@@ -63,7 +60,7 @@ export default function EarphonesPage() {
                 New Product
               </p>
             )}
-            <h2 className="text-3xl md:text-4xl font-bold uppercase mb-6 max-w-sm leading-snug">
+            <h2 className="text-2xl md:text-3xl font-bold uppercase mb-6 max-w-sm leading-snug">
               {product.name}
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed max-w-md">
@@ -112,7 +109,7 @@ export default function EarphonesPage() {
       <section className="max-w-7xl mx-auto px-6 py-16 md:py-24">
         <div className="flex flex-col-reverse lg:flex-row items-center text-center lg:text-left gap-12 lg:gap-20">
           <div className="lg:w-1/2">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 uppercase">
+            <h2 className="text-2xl md:text-3xl font-bold mb-8 uppercase">
               Bringing you the <br />
               <span className="text-[#d87d4a]">best</span> audio gear
             </h2>
