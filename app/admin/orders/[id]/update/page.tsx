@@ -148,7 +148,7 @@ export default function UpdateOrderTrackingPage() {
               <ArrowLeft size={20} className="text-gray-600" />
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900">
                 Update Order Tracking
               </h1>
               <p className="text-gray-600 text-sm mt-1">
@@ -185,7 +185,7 @@ export default function UpdateOrderTrackingPage() {
                   <p className="text-xs text-gray-500 uppercase font-semibold">
                     Total Amount
                   </p>
-                  <p className="text-2xl font-bold text-[#d87d4a]">
+                  <p className="text-xl font-bold text-[#d87d4a]">
                     ${order.totals.total.toFixed(2)}
                   </p>
                 </div>

@@ -166,7 +166,7 @@ export default function AdminOrdersPage() {
               <ArrowLeft size={20} className="text-gray-600" />
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900">
                 Orders Management
               </h1>
               <p className="text-gray-600 text-sm mt-1">
@@ -181,32 +181,32 @@ export default function AdminOrdersPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           <div className="bg-white p-4 rounded-lg shadow-sm">
-            <p className="text-gray-600 text-sm font-medium">Total Orders</p>
-            <p className="text-2xl font-bold text-gray-900 mt-2">
+            <p className="text-gray-600 text-xs font-medium">Total Orders</p>
+            <p className="text-lg font-bold text-gray-900 mt-2">
               {stats.total}
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-sm">
-            <p className="text-gray-600 text-sm font-medium">Pending</p>
-            <p className="text-2xl font-bold text-gray-500 mt-2">
+            <p className="text-gray-600 text-xs font-medium">Pending</p>
+            <p className="text-lg font-bold text-gray-500 mt-2">
               {stats.pending}
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-sm">
-            <p className="text-gray-600 text-sm font-medium">Processing</p>
-            <p className="text-2xl font-bold text-blue-600 mt-2">
+            <p className="text-gray-600 text-xs font-medium">Processing</p>
+            <p className="text-lg font-bold text-blue-600 mt-2">
               {stats.processing}
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-sm">
-            <p className="text-gray-600 text-sm font-medium">Shipped</p>
-            <p className="text-2xl font-bold text-purple-600 mt-2">
+            <p className="text-gray-600 text-xs font-medium">Shipped</p>
+            <p className="text-lg font-bold text-purple-600 mt-2">
               {stats.shipped}
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-sm">
-            <p className="text-gray-600 text-sm font-medium">Delivered</p>
-            <p className="text-2xl font-bold text-green-600 mt-2">
+            <p className="text-gray-600 text-xs font-medium">Delivered</p>
+            <p className="text-lg font-bold text-green-600 mt-2">
               {stats.delivered}
             </p>
           </div>
@@ -325,7 +325,7 @@ export default function AdminOrdersPage() {
                   </div>
 
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-[#d87d4a]">
+                    <p className="text-xl font-bold text-[#d87d4a]">
                       ${order.totals.total.toFixed(2)}
                     </p>
                     <Eye
@@ -393,7 +393,7 @@ export default function AdminOrdersPage() {
                           </div>
                           <div className="flex justify-between text-sm pt-2 border-t border-gray-300">
                             <p className="text-gray-900 font-semibold">Total</p>
-                            <p className="text-[#d87d4a] font-bold text-lg">
+                            <p className="text-[#d87d4a] font-bold text-base">
                               ${order.totals.total.toFixed(2)}
                             </p>
                           </div>
