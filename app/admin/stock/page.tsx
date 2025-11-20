@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
-import AdminLayout from '@/app/components/AdminLayout';
+import AdminSidebar from '@/app/components/AdminSidebar';
 import AdminAuthGuard from '@/app/components/AdminAuthGuard';
 import { useAuth } from '@/app/components/AuthProvider';
 import { toast } from 'react-toastify';
@@ -73,155 +73,160 @@ export default function AdminStock() {
 
   return (
     <AdminAuthGuard>
-      <AdminLayout>
-        <div className="p-8">
-          <h1 className="text-3xl font-bold mb-8">Stock Management</h1>
+      <div className="flex flex-col md:flex-row md:h-screen">
+        <AdminSidebar />
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-8">
+            <h1 className="text-3xl font-bold mb-8">Stock Management</h1>
 
-          {/* Add Stock Card */}
-          <div className="grid lg:grid-cols-2 gap-8 mb-8">
-            <div className="bg-white p-8 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold mb-6">Add Stock</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Select Product *
-                  </label>
-                  <select
-                    value={selectedProduct}
-                    onChange={(e) => setSelectedProduct(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
+            {/* Add Stock Card */}
+            <div className="grid lg:grid-cols-2 gap-8 mb-8">
+              <div className="bg-white p-8 rounded-lg shadow-lg">
+                <h2 className="text-2xl font-bold mb-6">Add Stock</h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      Select Product *
+                    </label>
+                    <select
+                      value={selectedProduct}
+                      onChange={(e) => setSelectedProduct(e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
+                    >
+                      <option value="">Choose a product...</option>
+                      {products.map(
+                        (product: {
+                          _id: string;
+                          name: string;
+                          stock: number;
+                        }) => (
+                          <option key={product._id} value={product._id}>
+                            {product.name} (Current: {product.stock})
+                          </option>
+                        )
+                      )}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      Quantity to Add *
+                    </label>
+                    <input
+                      type="number"
+                      value={quantity}
+                      onChange={(e) =>
+                        setQuantity(parseFloat(e.target.value) || 0)
+                      }
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
+                      placeholder="0"
+                      min="1"
+                    />
+                  </div>
+
+                  <button
+                    onClick={handleAddStock}
+                    disabled={submitting}
+                    className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition font-semibold disabled:opacity-50"
                   >
-                    <option value="">Choose a product...</option>
-                    {products.map(
-                      (product: {
-                        _id: string;
-                        name: string;
-                        stock: number;
-                      }) => (
-                        <option key={product._id} value={product._id}>
-                          {product.name} (Current: {product.stock})
-                        </option>
-                      )
-                    )}
-                  </select>
+                    <Plus size={20} />
+                    Add Stock
+                  </button>
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Quantity to Add *
-                  </label>
-                  <input
-                    type="number"
-                    value={quantity}
-                    onChange={(e) =>
-                      setQuantity(parseFloat(e.target.value) || 0)
-                    }
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
-                    placeholder="0"
-                    min="1"
-                  />
-                </div>
-
-                <button
-                  onClick={handleAddStock}
-                  disabled={submitting}
-                  className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition font-semibold disabled:opacity-50"
-                >
-                  <Plus size={20} />
-                  Add Stock
-                </button>
+              {/* Info Card */}
+              <div className="bg-blue-50 p-8 rounded-lg border-l-4 border-blue-600">
+                <h3 className="text-xl font-bold text-blue-900 mb-4">
+                  📊 Stock Tips
+                </h3>
+                <ul className="text-sm text-blue-800 space-y-2">
+                  <li>✓ Monitor stock levels regularly</li>
+                  <li>✓ Reorder when stock drops below reorder level</li>
+                  <li>✓ Update stock when items are sold</li>
+                  <li>✓ Track stock history for analysis</li>
+                </ul>
               </div>
             </div>
 
-            {/* Info Card */}
-            <div className="bg-blue-50 p-8 rounded-lg border-l-4 border-blue-600">
-              <h3 className="text-xl font-bold text-blue-900 mb-4">
-                📊 Stock Tips
-              </h3>
-              <ul className="text-sm text-blue-800 space-y-2">
-                <li>✓ Monitor stock levels regularly</li>
-                <li>✓ Reorder when stock drops below reorder level</li>
-                <li>✓ Update stock when items are sold</li>
-                <li>✓ Track stock history for analysis</li>
-              </ul>
-            </div>
-          </div>
+            {/* Stock Table */}
+            <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b bg-gray-50">
+                    <th className="text-left py-4 px-6 font-semibold">
+                      Product
+                    </th>
+                    <th className="text-right py-4 px-6 font-semibold">
+                      Current Stock
+                    </th>
+                    <th className="text-center py-4 px-6 font-semibold">
+                      Status
+                    </th>
+                    <th className="text-center py-4 px-6 font-semibold">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map(
+                    (product: { _id: string; name: string; stock: number }) => {
+                      const isLow = product.stock < 10;
+                      const isEmpty = product.stock === 0;
 
-          {/* Stock Table */}
-          <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b bg-gray-50">
-                  <th className="text-left py-4 px-6 font-semibold">Product</th>
-                  <th className="text-right py-4 px-6 font-semibold">
-                    Current Stock
-                  </th>
-                  <th className="text-center py-4 px-6 font-semibold">
-                    Status
-                  </th>
-                  <th className="text-center py-4 px-6 font-semibold">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map(
-                  (product: { _id: string; name: string; stock: number }) => {
-                    const isLow = product.stock < 10;
-                    const isEmpty = product.stock === 0;
-
-                    return (
-                      <tr
-                        key={product._id}
-                        className="border-b hover:bg-gray-50"
-                      >
-                        <td className="py-4 px-6 font-medium">
-                          {product.name}
-                        </td>
-                        <td className="py-4 px-6 text-right font-semibold">
-                          {product.stock} units
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              isEmpty
-                                ? 'bg-red-100 text-red-800'
+                      return (
+                        <tr
+                          key={product._id}
+                          className="border-b hover:bg-gray-50"
+                        >
+                          <td className="py-4 px-6 font-medium">
+                            {product.name}
+                          </td>
+                          <td className="py-4 px-6 text-right font-semibold">
+                            {product.stock} units
+                          </td>
+                          <td className="py-4 px-6 text-center">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                isEmpty
+                                  ? 'bg-red-100 text-red-800'
+                                  : isLow
+                                    ? 'bg-yellow-100 text-yellow-800'
+                                    : 'bg-green-100 text-green-800'
+                              }`}
+                            >
+                              {isEmpty
+                                ? 'Out of Stock'
                                 : isLow
-                                  ? 'bg-yellow-100 text-yellow-800'
-                                  : 'bg-green-100 text-green-800'
-                            }`}
-                          >
-                            {isEmpty
-                              ? 'Out of Stock'
-                              : isLow
-                                ? 'Low Stock'
-                                : 'In Stock'}
-                          </span>
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          <button
-                            onClick={() => handleReduceStock(product._id)}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition font-semibold"
-                          >
-                            <Minus size={16} />
-                            Reduce
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  }
-                )}
-              </tbody>
-            </table>
+                                  ? 'Low Stock'
+                                  : 'In Stock'}
+                            </span>
+                          </td>
+                          <td className="py-4 px-6 text-center">
+                            <button
+                              onClick={() => handleReduceStock(product._id)}
+                              className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition font-semibold"
+                            >
+                              <Minus size={16} />
+                              Reduce
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
+                </tbody>
+              </table>
 
-            {products.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                No products available. Add products first.
-              </div>
-            )}
+              {products.length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                  No products available. Add products first.
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </AdminLayout>
+      </div>
     </AdminAuthGuard>
   );
 }
