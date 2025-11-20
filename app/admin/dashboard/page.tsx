@@ -140,11 +140,11 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex h-screen">
-        {/* Left Sidebar */}
-        <div className="w-80 bg-white shadow-lg overflow-y-auto border-r border-gray-200">
-          <div className="p-6 sticky top-0 bg-white border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+      <div className="flex flex-col md:flex-row md:h-screen">
+        {/* Left Sidebar - Hidden on mobile, visible on tablet+ */}
+        <div className="hidden md:block md:w-80 bg-white shadow-lg overflow-y-auto border-r border-gray-200 max-h-screen">
+          <div className="p-4 md:p-6 sticky top-0 bg-white border-b border-gray-200">
+            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
               Records Summary
             </h2>
 
@@ -470,25 +470,25 @@ export default function AdminDashboard() {
 
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-8">
+          <div className="p-4 md:p-8">
             <div className="max-w-7xl">
               {/* Header with Filter Icon */}
-              <div className="mb-8 flex items-center justify-between">
+              <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                  <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-1 md:mb-2">
                     Admin Dashboard
                   </h1>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-xs md:text-sm text-gray-600">
                     Sales, Orders & Financial Overview
                   </p>
                 </div>
                 <button
                   onClick={() => setShowFilter(!showFilter)}
-                  className="flex items-center gap-2 bg-[#d87d4a] text-white px-6 py-3 rounded-lg hover:bg-[#fbaf85] transition font-semibold shadow-md"
+                  className="flex items-center justify-center gap-2 bg-[#d87d4a] text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-[#fbaf85] transition font-semibold text-sm md:text-base shadow-md w-full md:w-auto"
                   title="Filter orders by date range"
                 >
-                  <Calendar size={20} />
-                  <span className="hidden sm:inline">Filter by Date</span>
+                  <Calendar size={18} />
+                  <span>Filter</span>
                 </button>
               </div>
 
@@ -554,94 +554,100 @@ export default function AdminDashboard() {
               </div>
 
               {/* KPI Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
                 {/* Total Orders */}
-                <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-xs font-medium">
                         Total Orders
                       </p>
-                      <p className="text-xl font-bold text-gray-900 mt-2">
+                      <p className="text-lg md:text-xl font-bold text-gray-900 mt-2">
                         {dashboardMetrics.totalOrders}
                       </p>
                     </div>
-                    <Package size={24} className="text-[#d87d4a]" />
+                    <Package size={20} className="text-[#d87d4a]" />
                   </div>
                 </div>
 
                 {/* Total Revenue */}
-                <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-xs font-medium">
                         Total Revenue
                       </p>
-                      <p className="text-xl font-bold text-gray-900 mt-2">
+                      <p className="text-lg md:text-xl font-bold text-gray-900 mt-2">
                         ${dashboardMetrics.totalRevenue.toFixed(2)}
                       </p>
                     </div>
-                    <DollarSign size={24} className="text-green-500" />
+                    <DollarSign size={20} className="text-green-500" />
                   </div>
                 </div>
 
                 {/* Total Profit */}
-                <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-xs font-medium">
                         Total Profit
                       </p>
-                      <p className="text-xl font-bold text-green-600 mt-2">
+                      <p className="text-lg md:text-xl font-bold text-green-600 mt-2">
                         ${dashboardMetrics.totalProfit.toFixed(2)}
                       </p>
                       <p className="text-xs text-gray-500 mt-1">
                         {dashboardMetrics.profitMargin}% margin
                       </p>
                     </div>
-                    <TrendingUp size={24} className="text-green-600" />
+                    <TrendingUp size={20} className="text-green-600" />
                   </div>
                 </div>
 
                 {/* Average Order Value */}
-                <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-gray-600 text-xs font-medium">
                         Avg Order Value
                       </p>
-                      <p className="text-xl font-bold text-gray-900 mt-2">
+                      <p className="text-lg md:text-xl font-bold text-gray-900 mt-2">
                         ${dashboardMetrics.avgOrderValue.toFixed(2)}
                       </p>
                     </div>
-                    <TrendingUp size={24} className="text-blue-500" />
+                    <TrendingUp size={20} className="text-blue-500" />
                   </div>
                 </div>
               </div>
 
               {/* Status Overview */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
                 {/* Delivery Status */}
-                <div className="bg-white p-6 rounded-lg shadow-sm">
-                  <h2 className="text-base font-bold mb-4">Delivery Status</h2>
+                <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm">
+                  <h2 className="text-sm md:text-base font-bold mb-4">
+                    Delivery Status
+                  </h2>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Delivered</span>
-                      <span className="text-lg font-bold text-green-600">
+                      <span className="text-xs md:text-sm text-gray-600">
+                        Delivered
+                      </span>
+                      <span className="text-sm md:text-lg font-bold text-green-600">
                         {dashboardMetrics.deliveredCount}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Pending</span>
-                      <span className="text-lg font-bold text-yellow-600">
+                      <span className="text-xs md:text-sm text-gray-600">
+                        Pending
+                      </span>
+                      <span className="text-sm md:text-lg font-bold text-yellow-600">
                         {dashboardMetrics.pendingCount}
                       </span>
                     </div>
                     <div className="flex items-center justify-between pt-3 border-t">
-                      <span className="text-sm text-gray-600 font-semibold">
+                      <span className="text-xs md:text-sm text-gray-600 font-semibold">
                         Delivery Rate
                       </span>
-                      <span className="text-lg font-bold text-blue-600">
+                      <span className="text-sm md:text-lg font-bold text-blue-600">
                         {dashboardMetrics.deliveryRate}%
                       </span>
                     </div>
@@ -649,26 +655,32 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Cost Breakdown */}
-                <div className="bg-white p-6 rounded-lg shadow-sm">
-                  <h2 className="text-base font-bold mb-4">Financial Summary</h2>
+                <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm">
+                  <h2 className="text-sm md:text-base font-bold mb-4">
+                    Financial Summary
+                  </h2>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Revenue</span>
-                      <span className="text-lg font-bold text-green-600">
+                      <span className="text-xs md:text-sm text-gray-600">
+                        Revenue
+                      </span>
+                      <span className="text-sm md:text-lg font-bold text-green-600">
                         ${dashboardMetrics.totalRevenue.toFixed(2)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Cost (40%)</span>
-                      <span className="text-lg font-bold text-red-600">
+                      <span className="text-xs md:text-sm text-gray-600">
+                        Cost (40%)
+                      </span>
+                      <span className="text-sm md:text-lg font-bold text-red-600">
                         ${dashboardMetrics.totalCost.toFixed(2)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between pt-3 border-t">
-                      <span className="text-sm text-gray-600 font-semibold">
+                      <span className="text-xs md:text-sm text-gray-600 font-semibold">
                         Net Profit
                       </span>
-                      <span className="text-lg font-bold text-green-600">
+                      <span className="text-sm md:text-lg font-bold text-green-600">
                         ${dashboardMetrics.totalProfit.toFixed(2)}
                       </span>
                     </div>
@@ -677,11 +689,11 @@ export default function AdminDashboard() {
               </div>
 
               {/* Orders Table */}
-              <div className="bg-white p-6 rounded-lg shadow-sm overflow-x-auto">
-                <h2 className="text-base font-bold mb-4">
+              <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm overflow-x-auto">
+                <h2 className="text-sm md:text-base font-bold mb-4">
                   Orders ({filteredOrders.length})
                 </h2>
-                <table className="w-full text-xs">
+                <table className="w-full text-xs md:text-sm">
                   <thead>
                     <tr className="border-b border-gray-200">
                       <th className="text-left py-3 px-4 font-semibold">
