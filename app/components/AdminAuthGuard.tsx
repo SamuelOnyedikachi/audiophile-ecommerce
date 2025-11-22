@@ -23,6 +23,16 @@ export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {
       router.push('/');
       return;
     }
+
+    if (!user.isSuperAdmin) {
+      router.push('/');
+      return;
+    }
+
+    if (user.isAdmin && user.isSuperAdmin) {
+      router.push('/admin/dashboard');
+      return;
+    }
   }, [user, router]);
 
   if (!user?.isSuperAdmin || !user.isAdmin) {

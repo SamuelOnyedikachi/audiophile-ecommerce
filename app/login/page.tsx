@@ -3,10 +3,10 @@
 import { useAuth } from '@/app/components/AuthProvider';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 
-function LoginContent() {
-  const { login } = useAuth();
+export default function LoginPage() {
+  const { login, user, loading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
@@ -15,6 +15,17 @@ function LoginContent() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Safe redirect effect
+  useEffect(() => {
+    if (!user) return; // no user yet
+
+    if (user.isAdmin || user.isSuperAdmin) {
+      router.replace('/admin/dashboard'); // replace instead of push
+    } else {
+      router.replace(redirect);
+    }
+  }, [user, router, redirect]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,15 +38,26 @@ function LoginContent() {
       return;
     }
 
-    const result = await login(email, password);
-    setLoading(false);
-
-    if (result.success) {
-      router.push(decodeURIComponent(redirect));
-    } else {
-      setError(result.message || 'Login failed');
+    try {
+      const result = await login(email, password);
+      if (!result.success) {
+        setError(result.message || 'Login failed');
+      }
+      // redirect is handled by useEffect
+    } catch (err: any) {
+      setError(err?.message || 'Login failed');
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Checking authentication...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-4 py-12">
@@ -109,19 +131,5 @@ function LoginContent() {
         </p>
       </div>
     </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center">
-          <p>Loading...</p>
-        </div>
-      }
-    >
-      <LoginContent />
-    </Suspense>
   );
 }
