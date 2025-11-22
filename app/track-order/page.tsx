@@ -6,6 +6,7 @@ import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import Link from 'next/link';
 import { Truck, MapPin, CheckCircle } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export default function TrackOrderPage() {
   const [searchEmail, setSearchEmail] = useState('');
@@ -26,10 +27,10 @@ export default function TrackOrderPage() {
   const handleConfirmDelivery = async (orderId: string) => {
     try {
       await confirmDelivery({ orderId: orderId as Id<'orders'> });
-      alert('✅ Delivery confirmed successfully!');
+      toast.success('✅ Delivery confirmed successfully!');
     } catch (err) {
       console.error(err);
-      alert('❌ Failed to confirm delivery.');
+      toast.error('❌ Failed to confirm delivery.');
     }
   };
 

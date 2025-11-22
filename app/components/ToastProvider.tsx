@@ -13,9 +13,11 @@ export function ToastProvider() {
       closeOnClick={true}
       rtl={false}
       pauseOnFocusLoss={true}
-      draggable={true}
+      draggable={false}
       pauseOnHover={true}
-      theme="light"
+      theme="dark"
+      toastClassName="!bg-gray-900 !text-white !rounded-xl !shadow-xl border border-gray-700"
+      progressClassName="!bg-orange-500"
       style={{
         zIndex: 9999,
       }}

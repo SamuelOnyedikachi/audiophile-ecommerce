@@ -1,0 +1,207 @@
+{/* Interval Tabs */}
+            {/* <div className="flex flex-wrap gap-2">
+              {['today', 'week', 'month', 'year'].map((interval) => (
+                <button
+                  key={interval}
+                  onClick={() => setSidebarInterval(interval)}
+                  className={`px-3 py-1 text-xs font-semibold rounded-full transition ${
+                    sidebarInterval === interval
+                      ? 'bg-[#d87d4a] text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {interval.charAt(0).toUpperCase() + interval.slice(1)}
+                </button>
+              ))}
+            </div> */}
+
+            
+          <div className="p-6 space-y-6">
+            {/* Orders Record */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-gray-600 text-xs font-medium">
+                  Total Orders
+                </p>
+                <Package size={18} className="text-[#d87d4a]" />
+              </div>
+              <p className="text-lg font-bold text-gray-900">
+                {sidebarMetrics.totalOrders}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {sidebarDates.start} to {sidebarDates.end}
+              </p>
+            </div>
+
+            {/* Revenue */}
+            <div className="bg-green-50 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-gray-600 text-xs font-medium">
+                  Total Revenue
+                </p>
+                <DollarSign size={18} className="text-green-600" />
+              </div>
+              <p className="text-lg font-bold text-green-600">
+                ${sidebarMetrics.totalRevenue.toFixed(2)}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">Gross income</p>
+            </div>
+
+            {/* Cost */}
+            <div className="bg-red-50 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-gray-600 text-xs font-medium">Total Cost</p>
+                <DollarSign size={18} className="text-red-600" />
+              </div>
+              <p className="text-lg font-bold text-red-600">
+                ${sidebarMetrics.totalCost.toFixed(2)}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">40% of revenue</p>
+            </div>
+
+            {/* Profit */}
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-gray-600 text-xs font-medium">Net Profit</p>
+                <TrendingUp size={18} className="text-blue-600" />
+              </div>
+              <p className="text-lg font-bold text-blue-600">
+                ${sidebarMetrics.totalProfit.toFixed(2)}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {sidebarMetrics.profitMargin}% margin
+              </p>
+            </div>
+
+            {/* Deliveries */}
+            <div className="bg-purple-50 p-4 rounded-lg">
+              <p className="text-gray-600 text-xs font-medium mb-3">
+                Delivery Status
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-700">Delivered</span>
+                  <span className="text-sm font-bold text-green-600">
+                    {sidebarMetrics.deliveredCount}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-700">Pending</span>
+                  <span className="text-sm font-bold text-yellow-600">
+                    {sidebarMetrics.pendingCount}
+                  </span>
+                </div>
+                <div className="border-t pt-2 flex items-center justify-between">
+                  <span className="text-xs text-gray-700 font-semibold">
+                    Delivery Rate
+                  </span>
+                  <span className="text-sm font-bold text-blue-600">
+                    {sidebarMetrics.deliveryRate}%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Average Order Value */}
+            <div className="bg-indigo-50 p-4 rounded-lg">
+              <p className="text-gray-600 text-xs font-medium mb-2">
+                Average Order Value
+              </p>
+              <p className="text-lg font-bold text-indigo-600">
+                ${sidebarMetrics.avgOrderValue.toFixed(2)}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">Per transaction</p>
+            </div>
+
+            {/* Revenue */}
+            <div className="bg-green-50 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-gray-600 text-sm font-medium">
+                  Total Revenue
+                </p>
+                <DollarSign size={18} className="text-green-600" />
+              </div>
+              <p className="text-2xl font-bold text-green-600">
+                ${sidebarMetrics.totalRevenue.toFixed(2)}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">Gross income</p>
+            </div>
+
+            {/* Cost */}
+            <div className="bg-red-50 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-gray-600 text-sm font-medium">Total Cost</p>
+                <DollarSign size={18} className="text-red-600" />
+              </div>
+              <p className="text-2xl font-bold text-red-600">
+                ${sidebarMetrics.totalCost.toFixed(2)}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">40% of revenue</p>
+            </div>
+
+            {/* Profit */}
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-gray-600 text-sm font-medium">Net Profit</p>
+                <TrendingUp size={18} className="text-blue-600" />
+              </div>
+              <p className="text-2xl font-bold text-blue-600">
+                ${sidebarMetrics.totalProfit.toFixed(2)}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {sidebarMetrics.profitMargin}% margin
+              </p>
+            </div>
+
+            {/* Deliveries */}
+            <div className="bg-purple-50 p-4 rounded-lg">
+              <p className="text-gray-600 text-sm font-medium mb-3">
+                Delivery Status
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-700">Delivered</span>
+                  <span className="font-bold text-green-600">
+                    {sidebarMetrics.deliveredCount}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-700">Pending</span>
+                  <span className="font-bold text-yellow-600">
+                    {sidebarMetrics.pendingCount}
+                  </span>
+                </div>
+                <div className="border-t pt-2 flex items-center justify-between">
+                  <span className="text-xs text-gray-700 font-semibold">
+                    Delivery Rate
+                  </span>
+                  <span className="font-bold text-blue-600">
+                    {sidebarMetrics.deliveryRate}%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Average Order Value */}
+            <div className="bg-indigo-50 p-4 rounded-lg">
+              <p className="text-gray-600 text-sm font-medium mb-2">
+                Average Order Value
+              </p>
+              <p className="text-2xl font-bold text-indigo-600">
+                ${sidebarMetrics.avgOrderValue.toFixed(2)}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">Per transaction</p>
+            </div>
+
+            {/* Loss Calculation */}
+            {sidebarMetrics.totalCost > sidebarMetrics.totalRevenue && (
+              <div className="bg-red-100 p-4 rounded-lg border-l-4 border-red-600">
+                <p className="text-red-800 text-sm font-semibold">
+                  Loss: $
+                  {(
+                    sidebarMetrics.totalCost - sidebarMetrics.totalRevenue
+                  ).toFixed(2)}
+                </p>
+              </div>
+            )}
+          </div>

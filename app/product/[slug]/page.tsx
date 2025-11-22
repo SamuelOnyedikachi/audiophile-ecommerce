@@ -10,6 +10,7 @@ import { useCart } from '@/app/components/CartProvider';
 import { products } from '@/app/data/products';
 import ProductReviews from '@/app/components/ProductReviews';
 import ProductReviewForm from '@/app/components/ProductReviewForm';
+import { toast } from 'react-toastify';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -118,7 +119,7 @@ export default function ProductDetailPage() {
                         qty,
                         image: product.image,
                       });
-                      alert('Added to cart!');
+                      toast('Added to cart!');
                     })
                   }
                   className="bg-[#d87d4a] px-8 py-3 text-white font-semibold uppercase tracking-widest rounded hover:bg-[#fbaf85] transition"

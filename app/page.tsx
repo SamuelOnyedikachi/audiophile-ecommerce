@@ -6,7 +6,7 @@ export default function Home() {
     <div className="w-full overflow-x-hidden">
       {/* === HERO SECTION === */}
       <section className="bg-[#121212] text-white relative overflow-hidden">
-        <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 md:px-10 py-20 md:py-28">
+        <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 md:px-10 py-20 md:py-15">
           {/* === HERO IMAGE === */}
           <div className="relative w-full md:w-1/2 flex justify-center md:justify-end">
             <Image
@@ -64,7 +64,7 @@ export default function Home() {
       </section>
 
       {/* === CATEGORY CARDS === */}
-      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-6 md:px-10 py-20 pt-50 bg-white">
+      <section className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-6 md:px-10 py-20 pt-28 md:pt-45 bg-white">
         {[
           {
             title: 'Headphones',
@@ -84,7 +84,7 @@ export default function Home() {
         ].map((item) => (
           <div
             key={item.title}
-            className="bg-[#f1f1f1] rounded-xl flex flex-col items-center justify-center pt-28 pb-12 relative"
+            className="bg-[#f1f1f1] rounded-xl flex flex-col items-center justify-center md:my-2 my-10 pt-15 pb-12 relative"
           >
             <div className="absolute -top-20">
               <Image
@@ -109,7 +109,7 @@ export default function Home() {
       </section>
 
       {/* === FEATURED PRODUCTS === */}
-      <section className="max-w-7xl mx-auto px-6 md:px-10 py-20 space-y-36">
+      <section className="max-w-7xl mx-auto px-6 md:px-10 md:py-20 space-y-36">
         {/* ZX9 SPEAKER */}
         <div className="bg-[#d87d4a] rounded-2xl flex flex-col md:flex-row items-center py-10  text-white px-8 md:px-16 overflow-hidden relative text-center md:text-left">
           <div className="flex justify-center md:justify-start w-full md:w-auto mb-10  md:mb-0">
@@ -141,15 +141,29 @@ export default function Home() {
 
         {/* ZX7 SPEAKER */}
         <div className="relative rounded-2xl overflow-hidden">
-          <Image
-            src="/images/home/desktop/image-speaker-zx7.jpg"
-            alt="ZX7 Speaker"
-            width={1200}
-            height={400}
-            className="w-full object-cover"
-          />
-          <div className="absolute inset-0 flex flex-col justify-center pl-8 md:pl-16">
-            <h3 className="text-3xl md:text-4xl font-bold mb-8 text-black">
+          <picture>
+            {/* mobile */}
+            <source
+              media="(max-width: 640px)"
+              srcSet="/images/home/mobile/image-speaker-zx7.jpg"
+            />
+            {/* tablet */}
+            <source
+              media="(max-width: 1024px)"
+              srcSet="/images/home/tablet/image-speaker-zx7.jpg"
+            />
+            {/* desktop */}
+            <Image
+              src="/images/home/desktop/image-speaker-zx7.jpg"
+              alt="ZX7 Speaker"
+              width={1200}
+              height={400}
+              className="w-full h-full object-cover"
+            />
+          </picture>
+
+          <div className="absolute inset-0 flex flex-col justify-center pl-6 sm:pl-8 md:pl-16">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-black">
               ZX7 Speaker
             </h3>
             <Link

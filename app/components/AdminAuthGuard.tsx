@@ -25,7 +25,7 @@ export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {
     }
   }, [user, router]);
 
-  if (!user || !user.isAdmin) {
+  if (!user?.isSuperAdmin || !user.isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">

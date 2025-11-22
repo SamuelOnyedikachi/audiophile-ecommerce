@@ -14,6 +14,7 @@ import {
   Package,
   ChevronDown,
   ChevronUp,
+  LayoutDashboard
 } from 'lucide-react';
 
 type OrderLocal = {
@@ -121,7 +122,7 @@ export default function AdminSidebar() {
         </h2>
 
         {/* Interval Tabs */}
-        <div className="flex flex-wrap gap-2">
+        {/* <div className="flex flex-wrap gap-2">
           {['today', 'week', 'month', 'year'].map((interval) => (
             <button
               key={interval}
@@ -135,11 +136,21 @@ export default function AdminSidebar() {
               {interval.charAt(0).toUpperCase() + interval.slice(1)}
             </button>
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* Admin Navigation Links */}
       <nav className="mt-4 space-y-2">
+        <Link
+          href="/admin/dashboard"
+          className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100"
+        >
+          <LayoutDashboard size={18} className="text-gray-600" />
+          <span className="text-sm font-medium text-gray-700">
+             Dashboard
+          </span>
+         </Link>
+
         <Link
           href="/admin/products"
           className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100"
@@ -318,112 +329,6 @@ export default function AdminSidebar() {
           </span>
         </Link>
       </nav>
-
-      <div className="p-6 space-y-6">
-        {/* Orders Record */}
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-gray-600 text-xs font-medium">Total Orders</p>
-            <Package size={18} className="text-[#d87d4a]" />
-          </div>
-          <p className="text-lg font-bold text-gray-900">
-            {sidebarMetrics.totalOrders}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            {sidebarDates.start} to {sidebarDates.end}
-          </p>
-        </div>
-
-        {/* Revenue */}
-        <div className="bg-green-50 p-4 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-gray-600 text-xs font-medium">Total Revenue</p>
-            <span className="text-lg font-bold text-green-600">$</span>
-          </div>
-          <p className="text-lg font-bold text-green-600">
-            ${sidebarMetrics.totalRevenue.toFixed(2)}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">Gross income</p>
-        </div>
-
-        {/* Cost */}
-        <div className="bg-red-50 p-4 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-gray-600 text-xs font-medium">Total Cost</p>
-            <span className="text-lg font-bold text-red-600">$</span>
-          </div>
-          <p className="text-lg font-bold text-red-600">
-            ${sidebarMetrics.totalCost.toFixed(2)}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">40% of revenue</p>
-        </div>
-
-        {/* Profit */}
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-gray-600 text-xs font-medium">Net Profit</p>
-            <span className="text-lg font-bold text-blue-600">$</span>
-          </div>
-          <p className="text-lg font-bold text-blue-600">
-            ${sidebarMetrics.totalProfit.toFixed(2)}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            {sidebarMetrics.profitMargin}% margin
-          </p>
-        </div>
-
-        {/* Deliveries */}
-        <div className="bg-purple-50 p-4 rounded-lg">
-          <p className="text-gray-600 text-xs font-medium mb-3">
-            Delivery Status
-          </p>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-700">Delivered</span>
-              <span className="text-sm font-bold text-green-600">
-                {sidebarMetrics.deliveredCount}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-700">Pending</span>
-              <span className="text-sm font-bold text-yellow-600">
-                {sidebarMetrics.pendingCount}
-              </span>
-            </div>
-            <div className="border-t pt-2 flex items-center justify-between">
-              <span className="text-xs text-gray-700 font-semibold">
-                Delivery Rate
-              </span>
-              <span className="text-sm font-bold text-blue-600">
-                {sidebarMetrics.deliveryRate}%
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Average Order Value */}
-        <div className="bg-indigo-50 p-4 rounded-lg">
-          <p className="text-gray-600 text-xs font-medium mb-2">
-            Average Order Value
-          </p>
-          <p className="text-lg font-bold text-indigo-600">
-            ${sidebarMetrics.avgOrderValue.toFixed(2)}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">Per transaction</p>
-        </div>
-
-        {/* Loss Calculation */}
-        {sidebarMetrics.totalCost > sidebarMetrics.totalRevenue && (
-          <div className="bg-red-100 p-4 rounded-lg border-l-4 border-red-600">
-            <p className="text-red-800 text-sm font-semibold">
-              Loss: $
-              {(sidebarMetrics.totalCost - sidebarMetrics.totalRevenue).toFixed(
-                2
-              )}
-            </p>
-          </div>
-        )}
-      </div>
     </div>
   );
 }

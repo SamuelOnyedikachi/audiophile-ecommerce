@@ -1,0 +1,513 @@
+
+// 'use client';
+
+// import { useState } from 'react';
+// import { useQuery } from 'convex/react';
+// import { api } from '@/convex/_generated/api';
+// import Link from 'next/link';
+// import {
+//   Calendar,
+//   TrendingUp,
+//   Package,
+//   DollarSign,
+//   X,
+//   Box,
+//   PlusCircle,
+//   UserPlus,
+//   Users,
+//   Truck,
+//   ClipboardList,
+//   ChevronDown,
+//   ChevronRight,
+//   Menu,
+//   LayoutDashboard,
+// } from 'lucide-react';
+
+// type OrderLocal = {
+//   _id: string;
+//   customer: { name: string; email: string; phone?: string };
+//   totals: { subtotal: number; shipping: number; taxes: number; total: number };
+//   status: string;
+//   createdAt: string;
+// };
+
+// const getDefaultDates = () => {
+//   const end = new Date();
+//   const start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+//   return {
+//     start: start.toISOString().split('T')[0],
+//     end: end.toISOString().split('T')[0],
+//   };
+// };
+
+// const calculateMetricsForOrders = (orders: OrderLocal[]) => {
+//   const totalOrders = orders.length;
+//   const totalRevenue = orders.reduce(
+//     (sum, order) => sum + order.totals.total,
+//     0
+//   );
+//   const totalCost = totalRevenue * 0.4;
+//   const totalProfit = totalRevenue - totalCost;
+//   const deliveredCount = orders.filter(
+//     (order) => order.status === 'delivered'
+//   ).length;
+//   const pendingCount = orders.filter(
+//     (order) => order.status === 'pending'
+//   ).length;
+
+//   return {
+//     totalOrders,
+//     totalRevenue,
+//     totalCost,
+//     totalProfit,
+//     deliveredCount,
+//     pendingCount,
+//     deliveryRate:
+//       totalOrders > 0 ? ((deliveredCount / totalOrders) * 100).toFixed(1) : 0,
+//     profitMargin:
+//       totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100).toFixed(2) : '0',
+//     avgOrderValue: totalOrders > 0 ? totalRevenue / totalOrders : 0,
+//   };
+// };
+
+// export default function AdminDashboard() {
+//   const { start: defaultStart, end: defaultEnd } = getDefaultDates();
+//   const [startDate, setStartDate] = useState(defaultStart);
+//   const [endDate, setEndDate] = useState(defaultEnd);
+//   const [showFilter, setShowFilter] = useState(false);
+//   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+//   // Dropdown states
+//   const [productsOpen, setProductsOpen] = useState(false);
+//   const [stockOpen, setStockOpen] = useState(false);
+//   const [vendorsOpen, setVendorsOpen] = useState(false);
+//   const [customersOpen, setCustomersOpen] = useState(false);
+//   const [usersOpen, setUsersOpen] = useState(false);
+
+//   const allOrders = useQuery(api.orders.getAllOrders) || [];
+
+//   const filteredOrders = (allOrders as OrderLocal[]).filter((order) => {
+//     const orderDate = new Date(order.createdAt);
+//     const start = new Date(startDate);
+//     const end = new Date(endDate);
+//     end.setHours(23, 59, 59, 999);
+//     return orderDate >= start && orderDate <= end;
+//   });
+
+//   const dashboardMetrics = calculateMetricsForOrders(filteredOrders);
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 flex">
+//       {/* Sidebar */}
+//       <aside
+//         className={`${
+//           sidebarOpen ? 'w-72' : 'w-0'
+//         } bg-white shadow-lg transition-all duration-300 overflow-hidden flex-shrink-0`}
+//       >
+//         <div className="h-full overflow-y-auto">
+//           {/* Sidebar Header */}
+//           <div className="p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
+//             <div className="flex items-center justify-between mb-4">
+//               <h2 className="text-xl font-bold text-gray-900">Admin Panel</h2>
+//               <button
+//                 onClick={() => setSidebarOpen(false)}
+//                 className="lg:hidden p-1 hover:bg-gray-100 rounded"
+//               >
+//                 <X size={20} />
+//               </button>
+//             </div>
+//             <Link
+//               href="/admin"
+//               className="flex items-center gap-3 p-3 bg-[#d87d4a] text-white rounded-lg hover:bg-[#fbaf85] transition"
+//             >
+//               <LayoutDashboard size={20} />
+//               <span className="font-semibold">Dashboard</span>
+//             </Link>
+//           </div>
+
+//           {/* Navigation */}
+//           <nav className="p-4 space-y-2">
+//             {/* Products Dropdown */}
+//             <div>
+//               <button
+//                 onClick={() => setProductsOpen(!productsOpen)}
+//                 className="flex items-center justify-between w-full p-3 hover:bg-gray-100 rounded-lg transition"
+//               >
+//                 <div className="flex items-center gap-3">
+//                   <Box size={18} className="text-gray-600" />
+//                   <span className="font-medium text-gray-700">Products</span>
+//                 </div>
+//                 {productsOpen ? (
+//                   <ChevronDown size={18} className="text-gray-600" />
+//                 ) : (
+//                   <ChevronRight size={18} className="text-gray-600" />
+//                 )}
+//               </button>
+//               {productsOpen && (
+//                 <div className="ml-6 mt-2 space-y-1">
+//                   <Link
+//                     href="/admin/products"
+//                     className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+//                   >
+//                     All Products
+//                   </Link>
+//                   <Link
+//                     href="/admin/products/add"
+//                     className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+//                   >
+//                     Add Product
+//                   </Link>
+//                 </div>
+//               )}
+//             </div>
+
+//             {/* Stock Dropdown */}
+//             <div>
+//               <button
+//                 onClick={() => setStockOpen(!stockOpen)}
+//                 className="flex items-center justify-between w-full p-3 hover:bg-gray-100 rounded-lg transition"
+//               >
+//                 <div className="flex items-center gap-3">
+//                   <ClipboardList size={18} className="text-gray-600" />
+//                   <span className="font-medium text-gray-700">Stock</span>
+//                 </div>
+//                 {stockOpen ? (
+//                   <ChevronDown size={18} className="text-gray-600" />
+//                 ) : (
+//                   <ChevronRight size={18} className="text-gray-600" />
+//                 )}
+//               </button>
+//               {stockOpen && (
+//                 <div className="ml-6 mt-2 space-y-1">
+//                   <Link
+//                     href="/admin/stock"
+//                     className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+//                   >
+//                     Stock Balance
+//                   </Link>
+//                   <Link
+//                     href="/admin/stock/add"
+//                     className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+//                   >
+//                     Add Stock
+//                   </Link>
+//                 </div>
+//               )}
+//             </div>
+
+//             {/* Vendors Dropdown */}
+//             <div>
+//               <button
+//                 onClick={() => setVendorsOpen(!vendorsOpen)}
+//                 className="flex items-center justify-between w-full p-3 hover:bg-gray-100 rounded-lg transition"
+//               >
+//                 <div className="flex items-center gap-3">
+//                   <Truck size={18} className="text-gray-600" />
+//                   <span className="font-medium text-gray-700">Vendors</span>
+//                 </div>
+//                 {vendorsOpen ? (
+//                   <ChevronDown size={18} className="text-gray-600" />
+//                 ) : (
+//                   <ChevronRight size={18} className="text-gray-600" />
+//                 )}
+//               </button>
+//               {vendorsOpen && (
+//                 <div className="ml-6 mt-2 space-y-1">
+//                   <Link
+//                     href="/admin/vendors"
+//                     className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+//                   >
+//                     All Vendors
+//                   </Link>
+//                   <Link
+//                     href="/admin/vendors/register"
+//                     className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+//                   >
+//                     Register Vendor
+//                   </Link>
+//                 </div>
+//               )}
+//             </div>
+
+//             {/* Customers Dropdown */}
+//             <div>
+//               <button
+//                 onClick={() => setCustomersOpen(!customersOpen)}
+//                 className="flex items-center justify-between w-full p-3 hover:bg-gray-100 rounded-lg transition"
+//               >
+//                 <div className="flex items-center gap-3">
+//                   <Users size={18} className="text-gray-600" />
+//                   <span className="font-medium text-gray-700">Customers</span>
+//                 </div>
+//                 {customersOpen ? (
+//                   <ChevronDown size={18} className="text-gray-600" />
+//                 ) : (
+//                   <ChevronRight size={18} className="text-gray-600" />
+//                 )}
+//               </button>
+//               {customersOpen && (
+//                 <div className="ml-6 mt-2 space-y-1">
+//                   <Link
+//                     href="/admin/customers"
+//                     className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+//                   >
+//                     All Customers
+//                   </Link>
+//                   <Link
+//                     href="/admin/customers/register"
+//                     className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+//                   >
+//                     Register Customer
+//                   </Link>
+//                 </div>
+//               )}
+//             </div>
+
+//             {/* Users Dropdown */}
+//             <div>
+//               <button
+//                 onClick={() => setUsersOpen(!usersOpen)}
+//                 className="flex items-center justify-between w-full p-3 hover:bg-gray-100 rounded-lg transition"
+//               >
+//                 <div className="flex items-center gap-3">
+//                   <UserPlus size={18} className="text-gray-600" />
+//                   <span className="font-medium text-gray-700">Users</span>
+//                 </div>
+//                 {usersOpen ? (
+//                   <ChevronDown size={18} className="text-gray-600" />
+//                 ) : (
+//                   <ChevronRight size={18} className="text-gray-600" />
+//                 )}
+//               </button>
+//               {usersOpen && (
+//                 <div className="ml-6 mt-2 space-y-1">
+//                   <Link
+//                     href="/admin/users"
+//                     className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+//                   >
+//                     Manage Users
+//                   </Link>
+//                   <Link
+//                     href="/admin/users/register"
+//                     className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+//                   >
+//                     Register User
+//                   </Link>
+//                 </div>
+//               )}
+//             </div>
+
+//             {/* Orders (Single Link) */}
+//             <Link
+//               href="/admin/orders"
+//               className="flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition"
+//             >
+//               <Package size={18} className="text-gray-600" />
+//               <span className="font-medium text-gray-700">Orders</span>
+//             </Link>
+//           </nav>
+//         </div>
+//       </aside>
+
+//       {/* Main Content */}
+//       <div className="flex-1 overflow-auto">
+//         {/* Header */}
+//         <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
+//           <div className="px-6 py-4 flex items-center justify-between">
+//             <div className="flex items-center gap-4">
+//               {!sidebarOpen && (
+//                 <button
+//                   onClick={() => setSidebarOpen(true)}
+//                   className="p-2 hover:bg-gray-100 rounded-lg"
+//                 >
+//                   <Menu size={24} />
+//                 </button>
+//               )}
+//               <div>
+//                 <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+//                 <p className="text-sm text-gray-600">
+//                   {new Date(startDate).toLocaleDateString()} -{' '}
+//                   {new Date(endDate).toLocaleDateString()}
+//                 </p>
+//               </div>
+//             </div>
+//             <button
+//               onClick={() => setShowFilter(!showFilter)}
+//               className="flex items-center gap-2 bg-[#d87d4a] text-white px-6 py-3 rounded-lg hover:bg-[#fbaf85] transition font-semibold"
+//             >
+//               <Calendar size={18} />
+//               Filter
+//             </button>
+//           </div>
+//         </div>
+
+//         {/* Filter Modal */}
+//         {showFilter && (
+//           <>
+//             <div
+//               className="fixed inset-0 bg-black bg-opacity-50 z-40"
+//               onClick={() => setShowFilter(false)}
+//             />
+//             <div className="fixed right-0 top-0 h-screen w-96 bg-white shadow-lg z-50 p-6">
+//               <div className="flex items-center justify-between mb-6">
+//                 <h2 className="text-lg font-bold">Filter Orders</h2>
+//                 <button
+//                   onClick={() => setShowFilter(false)}
+//                   className="p-1 hover:bg-gray-100 rounded"
+//                 >
+//                   <X size={24} />
+//                 </button>
+//               </div>
+//               <div className="space-y-4">
+//                 <div>
+//                   <label className="block text-sm font-semibold mb-2">
+//                     Start Date
+//                   </label>
+//                   <input
+//                     type="date"
+//                     value={startDate}
+//                     onChange={(e) => setStartDate(e.target.value)}
+//                     className="w-full p-3 border rounded-lg"
+//                   />
+//                 </div>
+//                 <div>
+//                   <label className="block text-sm font-semibold mb-2">
+//                     End Date
+//                   </label>
+//                   <input
+//                     type="date"
+//                     value={endDate}
+//                     onChange={(e) => setEndDate(e.target.value)}
+//                     className="w-full p-3 border rounded-lg"
+//                   />
+//                 </div>
+//                 <button
+//                   onClick={() => setShowFilter(false)}
+//                   className="w-full bg-[#d87d4a] text-white py-3 rounded-lg hover:bg-[#fbaf85]"
+//                 >
+//                   Apply Filter
+//                 </button>
+//               </div>
+//             </div>
+//           </>
+//         )}
+
+//         {/* Dashboard Content */}
+//         <div className="p-8">
+//           {/* KPI Cards */}
+//           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+//             <div className="bg-white p-6 rounded-lg shadow-sm">
+//               <div className="flex items-center justify-between">
+//                 <div>
+//                   <p className="text-gray-600 text-sm">Total Orders</p>
+//                   <p className="text-2xl font-bold text-gray-900 mt-2">
+//                     {dashboardMetrics.totalOrders}
+//                   </p>
+//                 </div>
+//                 <Package size={24} className="text-[#d87d4a]" />
+//               </div>
+//             </div>
+
+//             <div className="bg-white p-6 rounded-lg shadow-sm">
+//               <div className="flex items-center justify-between">
+//                 <div>
+//                   <p className="text-gray-600 text-sm">Total Revenue</p>
+//                   <p className="text-2xl font-bold text-green-600 mt-2">
+//                     ${dashboardMetrics.totalRevenue.toFixed(2)}
+//                   </p>
+//                 </div>
+//                 <DollarSign size={24} className="text-green-600" />
+//               </div>
+//             </div>
+
+//             <div className="bg-white p-6 rounded-lg shadow-sm">
+//               <div className="flex items-center justify-between">
+//                 <div>
+//                   <p className="text-gray-600 text-sm">Total Profit</p>
+//                   <p className="text-2xl font-bold text-blue-600 mt-2">
+//                     ${dashboardMetrics.totalProfit.toFixed(2)}
+//                   </p>
+//                   <p className="text-xs text-gray-500 mt-1">
+//                     {dashboardMetrics.profitMargin}% margin
+//                   </p>
+//                 </div>
+//                 <TrendingUp size={24} className="text-blue-600" />
+//               </div>
+//             </div>
+
+//             <div className="bg-white p-6 rounded-lg shadow-sm">
+//               <div className="flex items-center justify-between">
+//                 <div>
+//                   <p className="text-gray-600 text-sm">Avg Order Value</p>
+//                   <p className="text-2xl font-bold text-gray-900 mt-2">
+//                     ${dashboardMetrics.avgOrderValue.toFixed(2)}
+//                   </p>
+//                 </div>
+//                 <TrendingUp size={24} className="text-indigo-600" />
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Orders Table */}
+//           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+//             <div className="p-6 border-b">
+//               <h2 className="text-lg font-bold">
+//                 Recent Orders ({filteredOrders.length})
+//               </h2>
+//             </div>
+//             <div className="overflow-x-auto">
+//               <table className="w-full">
+//                 <thead className="bg-gray-50">
+//                   <tr>
+//                     <th className="text-left py-3 px-6 font-semibold text-sm">
+//                       Order ID
+//                     </th>
+//                     <th className="text-left py-3 px-6 font-semibold text-sm">
+//                       Customer
+//                     </th>
+//                     <th className="text-right py-3 px-6 font-semibold text-sm">
+//                       Amount
+//                     </th>
+//                     <th className="text-left py-3 px-6 font-semibold text-sm">
+//                       Status
+//                     </th>
+//                     <th className="text-left py-3 px-6 font-semibold text-sm">
+//                       Date
+//                     </th>
+//                   </tr>
+//                 </thead>
+//                 <tbody className="divide-y">
+//                   {filteredOrders.slice(0, 10).map((order) => (
+//                     <tr key={order._id} className="hover:bg-gray-50">
+//                       <td className="py-4 px-6 font-mono text-sm">
+//                         {String(order._id).slice(0, 8)}...
+//                       </td>
+//                       <td className="py-4 px-6">{order.customer.name}</td>
+//                       <td className="py-4 px-6 text-right font-semibold text-[#d87d4a]">
+//                         ${order.totals.total.toFixed(2)}
+//                       </td>
+//                       <td className="py-4 px-6">
+//                         <span
+//                           className={`px-3 py-1 rounded-full text-xs font-semibold ${
+//                             order.status === 'delivered'
+//                               ? 'bg-green-100 text-green-800'
+//                               : 'bg-yellow-100 text-yellow-800'
+//                           }`}
+//                         >
+//                           {order.status}
+//                         </span>
+//                       </td>
+//                       <td className="py-4 px-6 text-sm text-gray-600">
+//                         {new Date(order.createdAt).toLocaleDateString()}
+//                       </td>
+//                     </tr>
+//                   ))}
+//                 </tbody>
+//               </table>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
