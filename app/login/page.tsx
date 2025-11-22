@@ -1,12 +1,11 @@
 'use client';
-
 import { useAuth } from '@/app/components/AuthProvider';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 
-export default function LoginPage() {
-  const { login, user, loading: authLoading } = useAuth();
+function LoginForm() {
+  const { login, user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
@@ -19,7 +18,6 @@ export default function LoginPage() {
   // Safe redirect effect
   useEffect(() => {
     if (!user) return; // no user yet
-
     if (user.isAdmin || user.isSuperAdmin) {
       router.replace('/admin/dashboard'); // replace instead of push
     } else {
@@ -51,7 +49,7 @@ export default function LoginPage() {
     }
   };
 
-  if (authLoading) {
+  if (!user && !login) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>Checking authentication...</p>
@@ -86,6 +84,8 @@ export default function LoginPage() {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
               placeholder="you@example.com"
               disabled={loading}
+              required
+              autoComplete="email"
             />
           </div>
 
@@ -104,6 +104,8 @@ export default function LoginPage() {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d87d4a]"
               placeholder="••••••••"
               disabled={loading}
+              required
+              autoComplete="current-password"
             />
           </div>
 
@@ -131,5 +133,19 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <p>Loading...</p>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
