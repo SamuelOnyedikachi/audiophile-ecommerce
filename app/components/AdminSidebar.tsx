@@ -17,103 +17,103 @@ import {
   LayoutDashboard
 } from 'lucide-react';
 
-type OrderLocal = {
-  _id: string;
-  customer: { name: string; email: string; phone?: string };
-  shipping?: {
-    address: string;
-    city: string;
-    zipcode: string;
-    country: string;
-  };
-  items?: unknown[];
-  totals: { subtotal: number; shipping: number; taxes: number; total: number };
-  status: string;
-  tracking?: unknown;
-  deliveryConfirmed?: boolean;
-  createdAt: string;
-};
+// type OrderLocal = {
+//   _id: string;
+//   customer: { name: string; email: string; phone?: string };
+//   shipping?: {
+//     address: string;
+//     city: string;
+//     zipcode: string;
+//     country: string;
+//   };
+//   items?: unknown[];
+//   totals: { subtotal: number; shipping: number; taxes: number; total: number };
+//   status: string;
+//   tracking?: unknown;
+//   deliveryConfirmed?: boolean;
+//   createdAt: string;
+// };
 
-const calculateMetricsForOrders = (orders: OrderLocal[]) => {
-  const totalOrders = orders.length;
-  const totalRevenue = orders.reduce(
-    (sum: number, order: OrderLocal) => sum + order.totals.total,
-    0
-  );
-  const totalCost = totalRevenue * 0.4;
-  const totalProfit = totalRevenue - totalCost;
-  const deliveredCount = orders.filter(
-    (order: OrderLocal) => order.status === 'delivered'
-  ).length;
-  const pendingCount = orders.filter(
-    (order: OrderLocal) => order.status === 'pending'
-  ).length;
+// const calculateMetricsForOrders = (orders: OrderLocal[]) => {
+//   const totalOrders = orders.length;
+//   const totalRevenue = orders.reduce(
+//     (sum: number, order: OrderLocal) => sum + order.totals.total,
+//     0
+//   );
+//   const totalCost = totalRevenue * 0.4;
+//   const totalProfit = totalRevenue - totalCost;
+//   const deliveredCount = orders.filter(
+//     (order: OrderLocal) => order.status === 'delivered'
+//   ).length;
+//   const pendingCount = orders.filter(
+//     (order: OrderLocal) => order.status === 'pending'
+//   ).length;
 
-  return {
-    totalOrders,
-    totalRevenue,
-    totalCost,
-    totalProfit,
-    deliveredCount,
-    pendingCount,
-    deliveryRate:
-      totalOrders > 0 ? ((deliveredCount / totalOrders) * 100).toFixed(1) : 0,
-    profitMargin:
-      totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100).toFixed(2) : '0',
-    avgOrderValue: totalOrders > 0 ? totalRevenue / totalOrders : 0,
-  };
-};
+//   return {
+//     totalOrders,
+//     totalRevenue,
+//     totalCost,
+//     totalProfit,
+//     deliveredCount,
+//     pendingCount,
+//     deliveryRate:
+//       totalOrders > 0 ? ((deliveredCount / totalOrders) * 100).toFixed(1) : 0,
+//     profitMargin:
+//       totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100).toFixed(2) : '0',
+//     avgOrderValue: totalOrders > 0 ? totalRevenue / totalOrders : 0,
+//   };
+// };
 
-const getDateRangeForInterval = (interval: string) => {
-  const end = new Date();
-  const start = new Date();
+// const getDateRangeForInterval = (interval: string) => {
+//   const end = new Date();
+//   const start = new Date();
 
-  switch (interval) {
-    case 'today':
-      start.setHours(0, 0, 0, 0);
-      break;
-    case 'week':
-      start.setDate(end.getDate() - 7);
-      break;
-    case 'month':
-      start.setDate(end.getDate() - 30);
-      break;
-    case 'year':
-      start.setFullYear(end.getFullYear() - 1);
-      break;
-    default:
-      start.setDate(end.getDate() - 30);
-  }
+//   switch (interval) {
+//     case 'today':
+//       start.setHours(0, 0, 0, 0);
+//       break;
+//     case 'week':
+//       start.setDate(end.getDate() - 7);
+//       break;
+//     case 'month':
+//       start.setDate(end.getDate() - 30);
+//       break;
+//     case 'year':
+//       start.setFullYear(end.getFullYear() - 1);
+//       break;
+//     default:
+//       start.setDate(end.getDate() - 30);
+//   }
 
-  return {
-    start: start.toISOString().split('T')[0],
-    end: end.toISOString().split('T')[0],
-  };
-};
+//   return {
+//     start: start.toISOString().split('T')[0],
+//     end: end.toISOString().split('T')[0],
+//   };
+// };
 
 export default function AdminSidebar() {
-  const [sidebarInterval, setSidebarInterval] = useState('month');
+  // const [sidebarInterval, setSidebarInterval] = useState('month');
   const [openVendor, setOpenVendor] = useState(false);
   const [openCustomer, setOpenCustomer] = useState(false);
   const [openUser, setOpenUser] = useState(false);
   const [openStock, setOpenStock] = useState(false);
 
   // Fetch all orders
-  const allOrders = useQuery(api.orders.getAllOrders) || [];
+  // const allOrders = useQuery(api.orders.getAllOrders) || [];
 
   // Get sidebar data for selected interval
-  const sidebarDates = getDateRangeForInterval(sidebarInterval);
-  const sidebarOrders = (allOrders as OrderLocal[]).filter(
-    (order: OrderLocal) => {
-      const orderDate = new Date(order.createdAt);
-      const start = new Date(sidebarDates.start);
-      const end = new Date(sidebarDates.end);
-      end.setHours(23, 59, 59, 999);
-      return orderDate >= start && orderDate <= end;
-    }
-  );
-  const sidebarMetrics = calculateMetricsForOrders(sidebarOrders);
-
+  // // const sidebarDates = getDateRangeForInterval(sidebarInterval)
+;
+  // const sidebarOrders = (allOrders as OrderLocal[]).filter(
+  //   (order: OrderLocal) => {
+  //     const orderDate = new Date(order.createdAt);
+  //     const start = new Date(sidebarDates.start);
+  //     const end = new Date(sidebarDates.end);
+  //     end.setHours(23, 59, 59, 999);
+  //     return orderDate >= start && orderDate <= end;
+  //   }
+  // );
+  // const sidebarMetrics = calculateMetricsForOrders(sidebarOrders);
   return (
     <div className="hidden md:block md:w-80 bg-white shadow-lg overflow-y-auto border-r border-gray-200 max-h-screen">
       <div className="p-4 md:p-6 sticky top-0 bg-white border-b border-gray-200">

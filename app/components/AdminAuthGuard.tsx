@@ -1,5 +1,4 @@
 'use client';
-
 import { ReactNode } from 'react';
 import { useAuth } from './AuthProvider';
 import { useRouter } from 'next/navigation';
@@ -14,27 +13,29 @@ export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {
   const router = useRouter();
 
   useEffect(() => {
+    // If no user, redirect to login
     if (!user) {
       router.push('/login');
       return;
     }
 
+    // If user is not admin, redirect to home
     if (!user.isAdmin) {
       router.push('/');
       return;
     }
 
+    // If user is not superAdmin, redirect to home
     if (!user.isSuperAdmin) {
       router.push('/');
       return;
     }
 
-    if (user.isAdmin && user.isSuperAdmin) {
-      router.push('/admin/dashboard');
-      return;
-    }
+    // REMOVED THE PROBLEMATIC REDIRECT TO DASHBOARD
+    // User is authenticated and authorized, let them access the page
   }, [user, router]);
 
+  // Show loading or access denied while checking
   if (!user?.isSuperAdmin || !user.isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
