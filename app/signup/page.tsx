@@ -13,7 +13,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState<'client' | 'admin'>('client');
+  // const [role, setRole] = useState<'client' | 'admin'>('client');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +40,12 @@ export default function SignupPage() {
       return;
     }
 
-    const signupResult = await signup({ name, email, password, role });
+    const signupResult = await signup({
+       name, 
+       email, 
+       password, 
+      //  role 
+      });
     setLoading(false);
 
     if (signupResult.success) {
@@ -138,7 +143,7 @@ export default function SignupPage() {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label htmlFor="role" className="block text-sm font-semibold mb-2">
               Account Type
             </label>
@@ -155,7 +160,7 @@ export default function SignupPage() {
             <p className="text-xs text-gray-500 mt-1">
               (Admin accounts require approval)
             </p>
-          </div>
+          </div> */}
 
           <button
             type="submit"
