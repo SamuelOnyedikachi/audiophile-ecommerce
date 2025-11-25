@@ -90,8 +90,8 @@ export default function Home() {
               <Image
                 src={item.img}
                 alt={item.title}
-                width={140}
-                height={140}
+                width={160}
+                height={160}
                 className="object-contain"
               />
             </div>

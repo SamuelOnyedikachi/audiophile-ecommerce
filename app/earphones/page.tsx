@@ -74,13 +74,12 @@ export default function EarphonesPage() {
       </section>
 
       {/* === CATEGORY CARDS === */}
-      <section className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 px-6 md:px-10 lg:px-16 py-20 bg-white">
+      <section className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 px-6 md:px-10 lg:px-16 md:py-20 py-10 bg-white">
         {categories.map((item) => (
           <div
             key={item.title}
-            className="bg-[#f1f1f1] rounded-xl flex flex-col items-center justify-end h-48 md:h-56 pb-6 relative"
+            className="bg-[#f1f1f1] rounded-xl flex flex-col items-center justify-center md:my-2 my-10 pt-15 pb-12 relative"
           >
-            {/* Floating image */}
             <div className="absolute -top-14">
               <Image
                 src={item.img}
@@ -90,9 +89,7 @@ export default function EarphonesPage() {
                 className="object-contain"
               />
             </div>
-
-            {/* Text content */}
-            <h3 className="text-base font-bold uppercase tracking-wider mb-3">
+            <h3 className="text-base sm:text-lg font-bold uppercase mt-6 mb-3">
               {item.title}
             </h3>
             <Link
@@ -106,7 +103,7 @@ export default function EarphonesPage() {
       </section>
 
       {/* === AUDIO GEAR === */}
-      <section className="max-w-7xl mx-auto px-6 py-16 md:py-24">
+      <section className="max-w-7xl mx-auto px-6 py-10 md:py-24">
         <div className="flex flex-col-reverse lg:flex-row items-center text-center lg:text-left gap-12 lg:gap-20">
           <div className="lg:w-1/2">
             <h2 className="text-2xl md:text-3xl font-bold mb-8 uppercase">
