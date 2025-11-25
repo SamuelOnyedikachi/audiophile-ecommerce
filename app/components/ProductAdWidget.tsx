@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
-import { X } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 
 type ProductLocal = {
   _id: string;
@@ -54,86 +54,52 @@ export default function ProductAdWidget() {
   return (
     <div
       aria-hidden
-      className={
-        'fixed z-50 lg:bottom-6 lg:right-6 lg:w-80 md:bottom-0 md:left-5 md:right-0 md:w-full sm:bottom-0 sm:left-0 sm:right-0 sm:w-full pointer-events-auto transition-opacity duration-1000 ' +
-        (isFadingOut ? 'opacity-0' : 'opacity-100')
-      }
+      className={`fixed z-50 bottom-4 right-4 w-80 max-w-[90vw] pointer-events-auto transition-all duration-700 ease-in-out ${
+        isFadingOut ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
+      }`}
     >
-      <div className="hidden lg:block">
-        <div className="bg-orange-300 shadow-lg rounded-xl overflow-hidden relative">
-          <button
-            onClick={handleClose}
-            className="absolute top-2 right-2 z-10 p-1 bg-gray-200 hover:bg-gray-200 rounded-full transition"
-            aria-label="Close"
-          >
-            <X size={16} className="text-gray-600" />
-          </button>
-          <div className="p-3 border-b">
-            <p className="text-sm font-semibold text-gray-700">
-              New & Featured
-            </p>
-          </div>
-          <div className="p-3 space-y-3">
-            {visible.map((p: ProductLocal) => (
-              <a
-                key={p._id}
-                href={`/product/${p.slug}`}
-                className="flex items-center gap-3 hover:bg-gray-50 p-2 rounded-md transition"
-              >
-                <div className="w-12 h-12 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
-                  {p.image ? (
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-xs text-gray-500">No image</span>
-                  )}
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800">{p.name}</p>
-                  <p className="text-xs text-gray-500">${p.price.toFixed(2)}</p>
-                </div>
-              </a>
-            ))}
+      <div className="bg-white/70 backdrop-blur-xl shadow-2xl shadow-black/10 rounded-2xl overflow-hidden relative border border-white/30">
+        <button
+          onClick={handleClose}
+          className="absolute top-3 right-3 z-10 p-1 bg-black/5 hover:bg-black/10 rounded-full transition-colors"
+          aria-label="Close"
+        >
+          <X size={18} className="text-gray-600" />
+        </button>
+        <div className="p-4 border-b border-black/5">
+          <div className="flex items-center gap-2">
+            <Sparkles className="text-purple-600" size={20} />
+            <p className="text-base font-bold text-gray-800">New & Featured</p>
           </div>
         </div>
-      </div>
-      <div className="block lg:hidden">
-        <div className="bg-white border-t shadow-lg relative">
-          <button
-            onClick={handleClose}
-            className="absolute top-2 right-2 z-10 p-1 bg-gray-100 hover:bg-gray-200 rounded-full transition"
-            aria-label="Close"
-          >
-            <X size={16} className="text-gray-600" />
-          </button>
-          <div className="max-w-7xl mx-auto px-4 py-2 flex items-center gap-3 overflow-x-auto">
-            {visible.map((p: ProductLocal) => (
-              <a
-                key={p._id}
-                href={`/product/${p.slug}`}
-                className="shrink-0 w-44 bg-gray-50 rounded-lg p-2 flex items-center gap-3"
-              >
-                <div className="w-12 h-12 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
-                  {p.image ? (
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-xs text-gray-500">No image</span>
-                  )}
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800">{p.name}</p>
-                  <p className="text-xs text-gray-500">${p.price.toFixed(2)}</p>
-                </div>
-              </a>
-            ))}
-          </div>
+        <div className="p-2.5 space-y-2 max-h-[400px] overflow-y-auto">
+          {visible.map((p: ProductLocal) => (
+            <a
+              key={p._id}
+              href={`/product/${p.slug}`}
+              className="flex items-center gap-4 hover:bg-black/5 p-2 rounded-xl transition-all duration-200 hover:scale-[1.02]"
+            >
+              <div className="w-14 h-14 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center shrink-0 border border-black/5">
+                {p.image ? (
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                ) : (
+                  <span className="text-xs text-gray-500">No image</span>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-gray-900 truncate">
+                  {p.name}
+                </p>
+                <p className="text-sm text-purple-700 font-medium">
+                  ${p.price.toFixed(2)}
+                </p>
+              </div>
+            </a>
+          ))}
         </div>
       </div>
     </div>
