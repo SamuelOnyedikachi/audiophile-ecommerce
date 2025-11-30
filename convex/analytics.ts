@@ -392,7 +392,7 @@ export const getDashboardKPIs = query({
       kpis: [
         {
           label: 'Total Revenue',
-          value: `$${metrics.summary.netRevenue.toLocaleString('en-US', {
+          value: `₦${metrics.summary.netRevenue.toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}`,
@@ -413,7 +413,7 @@ export const getDashboardKPIs = query({
         },
         {
           label: 'Total Profit',
-          value: `$${metrics.summary.totalProfit.toLocaleString('en-US', {
+          value: `₦${metrics.summary.totalProfit.toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}`,
@@ -425,7 +425,7 @@ export const getDashboardKPIs = query({
         },
         {
           label: 'Avg Order Value',
-          value: `$${metrics.summary.avgOrderValue.toLocaleString('en-US', {
+          value: `₦${metrics.summary.avgOrderValue.toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}`,

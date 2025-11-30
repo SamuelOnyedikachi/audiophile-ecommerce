@@ -95,7 +95,7 @@ export default function ProductAdWidget() {
                   {p.name}
                 </p>
                 <p className="text-sm text-purple-700 font-medium">
-                  ${p.price.toFixed(2)}
+                  ₦{p.price.toFixed(2)}
                 </p>
               </div>
             </a>

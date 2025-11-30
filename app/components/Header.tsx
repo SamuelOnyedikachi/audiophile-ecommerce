@@ -350,9 +350,9 @@ export default function Header() {
             {user ? (
               <div className="flex flex-col items-center gap-3 pt-4 border-t border-white/10 w-full px-6">
                 {/* Mobile Profile Card */}
-                <div className="w-full bg-[#2a2a2a] rounded-lg p-4 space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#d87d4a] to-[#fbaf85] rounded-full flex items-center justify-center text-sm font-bold text-white">
+                <div className="w-full bg-[#2a2a2a] rounded-lg py-4 px-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-12 h-12 px-2 bg-gradient-to-br from-[#d87d4a] to-[#fbaf85] rounded-full flex items-center justify-center text-sm font-bold text-white">
                       {getUserInitials(user.name)}
                     </div>
                     <div>

@@ -57,7 +57,7 @@ export default function CheckoutForm() {
     { id: 'moniepoint', name: 'Moniepoint', code: '50150' },
   ];
 
-  const shipping = subtotal > 0 ? 25 : 0;
+  const shipping = subtotal > 0 ? 1000 : 0;
   const taxes = Math.round(subtotal * 0.07);
   const total = subtotal + shipping + taxes;
 
@@ -618,7 +618,7 @@ export default function CheckoutForm() {
                   <p className="text-gray-500 text-sm">x{item.qty}</p>
                 </div>
                 <p className="font-semibold">
-                  ${(item.price * item.qty).toFixed(2)}
+                  ₦{(item.price * item.qty).toFixed(2)}
                 </p>
               </li>
             ))}

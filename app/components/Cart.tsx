@@ -12,7 +12,7 @@ export default function Cart({
 }) {
   const { items, remove, updateQty, subtotal, clear } = useCart();
   const { requireAuth } = useAuthGuard();
-  const shipping = subtotal > 0 ? 25 : 0;
+  const shipping = subtotal > 0 ? 1000 : 0;
   const taxes = Math.round(subtotal * 0.07);
   const total = subtotal + shipping + taxes;
 
@@ -64,7 +64,7 @@ export default function Cart({
                     <div className="flex justify-between">
                       <p className="font-medium text-gray-800">{it.name}</p>
                       <p className="font-semibold text-gray-900">
-                        ${(it.price * it.qty).toFixed(2)}
+                        ₦{(it.price * it.qty).toFixed(2)}
                       </p>
                     </div>
                     <div className="mt-2 flex items-center gap-2">
@@ -93,19 +93,19 @@ export default function Cart({
             <div className="mt-6 space-y-2 text-gray-700">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>₦{subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span>${shipping.toFixed(2)}</span>
+                <span>₦{shipping.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Taxes</span>
-                <span>${taxes.toFixed(2)}</span>
+                <span>₦{taxes.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-bold text-lg text-gray-900 border-t pt-3">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>₦{total.toFixed(2)}</span>
               </div>
             </div>
 

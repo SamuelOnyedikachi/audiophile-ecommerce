@@ -319,7 +319,7 @@ export default function AdminProducts() {
                           {product.category}
                         </td>
                         <td className="py-4 px-6 text-right font-semibold">
-                          ${product.price.toFixed(2)}
+                          ₦{product.price.toFixed(2)}
                         </td>
                         <td className="py-4 px-6 text-right">
                           <span

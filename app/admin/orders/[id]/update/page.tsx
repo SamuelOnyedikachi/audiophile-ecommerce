@@ -186,7 +186,7 @@ export default function UpdateOrderTrackingPage() {
                     Total Amount
                   </p>
                   <p className="text-2xl font-bold text-[#d87d4a]">
-                    ${order.totals.total.toFixed(2)}
+                    ₦{order.totals.total.toFixed(2)}
                   </p>
                 </div>
 

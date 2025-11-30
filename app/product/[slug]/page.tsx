@@ -91,7 +91,7 @@ export default function ProductDetailPage() {
               <p className="text-gray-600 mb-8 leading-relaxed">
                 {product.description}
               </p>
-              <p className="text-2xl font-bold mb-8">${product.price}</p>
+              <p className="text-2xl font-bold mb-8">₦{product.price}</p>
 
               <div className="flex items-center gap-4 mb-8">
                 <div className="flex items-center bg-[#f1f1f1] rounded">

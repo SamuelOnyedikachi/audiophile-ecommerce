@@ -397,7 +397,7 @@ export default function AdminDashboard() {
                           Total Revenue
                         </p>
                         <p className="text-lg md:text-xl font-bold text-gray-900 mt-2">
-                          ${dashboardMetrics.totalRevenue.toFixed(2)}
+                          ₦{dashboardMetrics.totalRevenue.toFixed(2)}
                         </p>
                       </div>
                       <DollarSign size={20} className="text-green-500" />
@@ -412,7 +412,7 @@ export default function AdminDashboard() {
                           Total Profit
                         </p>
                         <p className="text-lg md:text-xl font-bold text-green-600 mt-2">
-                          ${dashboardMetrics.totalProfit.toFixed(2)}
+                          ₦{dashboardMetrics.totalProfit.toFixed(2)}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
                           {dashboardMetrics.profitMargin}% margin
@@ -430,7 +430,7 @@ export default function AdminDashboard() {
                           Avg Order Value
                         </p>
                         <p className="text-lg md:text-xl font-bold text-gray-900 mt-2">
-                          ${dashboardMetrics.avgOrderValue.toFixed(2)}
+                          ₦{dashboardMetrics.avgOrderValue.toFixed(2)}
                         </p>
                       </div>
                       <TrendingUp size={20} className="text-blue-500" />
@@ -484,7 +484,7 @@ export default function AdminDashboard() {
                           Revenue
                         </span>
                         <span className="text-sm md:text-lg font-bold text-green-600">
-                          ${dashboardMetrics.totalRevenue.toFixed(2)}
+                          ₦{dashboardMetrics.totalRevenue.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
@@ -492,7 +492,7 @@ export default function AdminDashboard() {
                           Cost (40%)
                         </span>
                         <span className="text-sm md:text-lg font-bold text-red-600">
-                          ${dashboardMetrics.totalCost.toFixed(2)}
+                          ₦{dashboardMetrics.totalCost.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex items-center justify-between pt-3 border-t">
@@ -500,7 +500,7 @@ export default function AdminDashboard() {
                           Net Profit
                         </span>
                         <span className="text-sm md:text-lg font-bold text-green-600">
-                          ${dashboardMetrics.totalProfit.toFixed(2)}
+                          ₦{dashboardMetrics.totalProfit.toFixed(2)}
                         </span>
                       </div>
                     </div>
@@ -558,7 +558,7 @@ export default function AdminDashboard() {
                                 {order.customer.email}
                               </td>
                               <td className="py-3 px-4 text-right font-semibold text-[#d87d4a]">
-                                ${order.totals.total.toFixed(2)}
+                                ₦{order.totals.total.toFixed(2)}
                               </td>
                               <td className="py-3 px-4">
                                 <span

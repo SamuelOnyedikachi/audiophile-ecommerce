@@ -329,7 +329,7 @@ export default function AdminOrdersPage() {
 
                     <div className="text-right">
                       <p className="text-xl font-bold text-[#d87d4a]">
-                        ${order.totals.total.toFixed(2)}
+                        ₦{order.totals.total.toFixed(2)}
                       </p>
                       <Eye
                         size={20}
@@ -366,7 +366,7 @@ export default function AdminOrdersPage() {
                                     </p>
                                   </div>
                                   <p className="font-semibold text-gray-900">
-                                    ${(item.price * item.qty).toFixed(2)}
+                                    ₦{(item.price * item.qty).toFixed(2)}
                                   </p>
                                 </div>
                               ))
@@ -379,19 +379,19 @@ export default function AdminOrdersPage() {
                             <div className="flex justify-between text-sm">
                               <p className="text-gray-600">Subtotal</p>
                               <p className="text-gray-900 font-medium">
-                                ${order.totals.subtotal.toFixed(2)}
+                                ₦{order.totals.subtotal.toFixed(2)}
                               </p>
                             </div>
                             <div className="flex justify-between text-sm">
                               <p className="text-gray-600">Shipping</p>
                               <p className="text-gray-900 font-medium">
-                                ${order.totals.shipping.toFixed(2)}
+                                ₦{order.totals.shipping.toFixed(2)}
                               </p>
                             </div>
                             <div className="flex justify-between text-sm">
                               <p className="text-gray-600">Taxes</p>
                               <p className="text-gray-900 font-medium">
-                                ${order.totals.taxes.toFixed(2)}
+                                ₦{order.totals.taxes.toFixed(2)}
                               </p>
                             </div>
                             <div className="flex justify-between text-sm pt-2 border-t border-gray-300">
@@ -399,7 +399,7 @@ export default function AdminOrdersPage() {
                                 Total
                               </p>
                               <p className="text-[#d87d4a] font-bold text-base">
-                                ${order.totals.total.toFixed(2)}
+                                ₦{order.totals.total.toFixed(2)}
                               </p>
                             </div>
                           </div>

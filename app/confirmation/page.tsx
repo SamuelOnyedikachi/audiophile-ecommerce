@@ -106,7 +106,7 @@ function ConfirmationContent() {
                   <p className="text-sm text-gray-500">Quantity: {item.qty}</p>
                 </div>
                 <p className="font-bold text-gray-900">
-                  ${(item.price * item.qty).toFixed(2)}
+                  ₦{(item.price * item.qty).toFixed(2)}
                 </p>
               </li>
             ))}

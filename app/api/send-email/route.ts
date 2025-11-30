@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         (it: any) => `
         <tr>
           <td style="padding:8px 0">${it.name} x ${it.qty}</td>
-          <td style="padding:8px 0;text-align:right">$${(
+          <td style="padding:8px 0;text-align:right">₦${(
             it.price * it.qty
           ).toFixed(2)}</td>
         </tr>
@@ -34,10 +34,10 @@ export async function POST(req: Request) {
         <p>Thanks for your order — here is a summary:</p>
         <table width="100%" style="margin-top:16px">
           ${itemsHtml}
-          <tr><td style="padding-top:12px">Subtotal</td><td style="text-align:right">$${order.totals.subtotal.toFixed(2)}</td></tr>
-          <tr><td>Shipping</td><td style="text-align:right">$${order.totals.shipping.toFixed(2)}</td></tr>
-          <tr><td>Taxes</td><td style="text-align:right">$${order.totals.taxes.toFixed(2)}</td></tr>
-          <tr style="font-weight:bold"><td>Total</td><td style="text-align:right">$${order.totals.total.toFixed(2)}</td></tr>
+          <tr><td style="padding-top:12px">Subtotal</td><td style="text-align:right">₦${order.totals.subtotal.toFixed(2)}</td></tr>
+          <tr><td>Shipping</td><td style="text-align:right">₦${order.totals.shipping.toFixed(2)}</td></tr>
+          <tr><td>Taxes</td><td style="text-align:right">₦${order.totals.taxes.toFixed(2)}</td></tr>
+          <tr style="font-weight:bold"><td>Total</td><td style="text-align:right">₦${order.totals.total.toFixed(2)}</td></tr>
         </table>
         <p style="margin-top:20px">Shipping to: ${order.shipping.address}, ${order.shipping.city}, ${order.shipping.zipcode}, ${order.shipping.country}</p>
         <p style="margin-top:20px">If you need help, contact ${SUPPORT_EMAIL}.</p>

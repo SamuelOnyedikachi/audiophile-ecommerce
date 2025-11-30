@@ -6,7 +6,7 @@ export const products = [
     name: 'XX99 Mark II Headphones',
     description:
       'The pinnacle of pristine audio. These headphones redefine your listening experience with superior sound clarity.',
-    price: 2999,
+    price: 29999,
     image:
       '/assets/product-xx99-mark-two/desktop/image-category-page-preview.jpg',
     features: `Experience natural, lifelike audio and exceptional build quality. 
@@ -30,7 +30,7 @@ The XX99 Mark II is designed for audiophiles seeking the best in sound performan
     name: 'XX99 Mark I Headphones',
     description:
       'Experience the perfect balance of comfort and performance with XX99 Mark I headphones.',
-    price: 1750,
+    price: 17550,
     image:
       '/assets/product-xx99-mark-one/desktop/image-category-page-preview.jpg',
     features: `Crafted for balanced sound and durability, the XX99 Mark I provides excellent comfort and clarity.`,
@@ -53,7 +53,7 @@ The XX99 Mark II is designed for audiophiles seeking the best in sound performan
     name: 'XX59 Headphones',
     description:
       'Enjoy high-quality sound at a more accessible price point with XX59 headphones.',
-    price: 899,
+    price: 8999,
     image:
       '/assets/product-xx59-headphones/desktop/image-category-page-preview.jpg',
     features: `Built for reliability and great sound at an affordable price, the XX59 offers excellent performance for everyday listening.`,
@@ -75,7 +75,7 @@ The XX99 Mark II is designed for audiophiles seeking the best in sound performan
     name: 'ZX9 Speaker',
     description:
       'A powerful speaker built for high-fidelity sound and elegant design that elevates your home audio.',
-    price: 4500,
+    price: 45000,
     image:
       '/assets/product-zx9-speaker/desktop/image-category-page-preview.jpg',
     features: `The ZX9 delivers deep, dynamic sound with premium components and superior clarity.`,
@@ -97,7 +97,7 @@ The XX99 Mark II is designed for audiophiles seeking the best in sound performan
     name: 'ZX7 Speaker',
     description:
       'A smaller, more versatile speaker that delivers rich sound and minimalist style.',
-    price: 3500,
+    price: 35000,
     image:
       '/assets/product-zx7-speaker/desktop/image-category-page-preview.jpg',
     features: `Compact yet powerful, the ZX7 speaker fits seamlessly into any setup while delivering premium audio.`,
@@ -119,7 +119,7 @@ The XX99 Mark II is designed for audiophiles seeking the best in sound performan
     name: 'YX1 Wireless Earphones',
     description:
       'Compact and convenient with true wireless freedom and crystal-clear audio.',
-    price: 599,
+    price: 5999,
     image:
       '/assets/product-yx1-earphones/desktop/image-category-page-preview.jpg',
     features: `Enjoy portability and powerful sound in a sleek wireless design with fast charging and noise isolation.`,

@@ -274,10 +274,10 @@ export const sendOrderConfirmation = action({
             ${item.qty}
           </td>
           <td style="padding: 12px 8px; border-bottom: 1px solid #f0f0f0; text-align: right;">
-            $${item.price.toFixed(2)}
+            ₦${item.price.toFixed(2)}
           </td>
           <td style="padding: 12px 8px; border-bottom: 1px solid #f0f0f0; text-align: right; font-weight: 600;">
-            $${(item.price * item.qty).toFixed(2)}
+            ₦${(item.price * item.qty).toFixed(2)}
           </td>
         </tr>
       `
@@ -365,7 +365,7 @@ export const sendOrderConfirmation = action({
                                 Subtotal
                               </td>
                               <td style="padding: 8px 0; color: #333333; font-size: 15px; text-align: right; width: 40%; font-weight: 500;">
-                                $${order.totals.subtotal.toFixed(2)}
+                                ₦${order.totals.subtotal.toFixed(2)}
                               </td>
                             </tr>
                             <tr>
@@ -373,7 +373,7 @@ export const sendOrderConfirmation = action({
                                 Shipping
                               </td>
                               <td style="padding: 8px 0; color: #333333; font-size: 15px; text-align: right; width: 40%; font-weight: 500;">
-                                $${order.totals.shipping.toFixed(2)}
+                                ₦${order.totals.shipping.toFixed(2)}
                               </td>
                             </tr>
                             <tr>
@@ -381,7 +381,7 @@ export const sendOrderConfirmation = action({
                                 Taxes
                               </td>
                               <td style="padding: 8px 0; color: #333333; font-size: 15px; text-align: right; width: 40%; font-weight: 500;">
-                                $${order.totals.taxes.toFixed(2)}
+                                ₦${order.totals.taxes.toFixed(2)}
                               </td>
                             </tr>
                             <tr>
@@ -389,7 +389,7 @@ export const sendOrderConfirmation = action({
                                 Grand Total
                               </td>
                               <td style="padding: 16px 0 0; border-top: 2px solid #e0e0e0; color: #d87d4a; font-size: 20px; font-weight: 700; text-align: right; width: 40%;">
-                                $${order.totals.total.toFixed(2)}
+                                ₦${order.totals.total.toFixed(2)}
                               </td>
                             </tr>
                           </table>
@@ -652,7 +652,7 @@ export const sendTrackingUpdateEmail = action({
                         </tr>
                         <tr>
                           <td style="padding: 8px 0; color: #666666; font-size: 14px; width: 60%;">Total:</td>
-                          <td style="padding: 8px 0; color: #333333; font-size: 14px; text-align: right; width: 40%; font-weight: 500;">$${order.totals.total.toFixed(2)}</td>
+                          <td style="padding: 8px 0; color: #333333; font-size: 14px; text-align: right; width: 40%; font-weight: 500;">₦${order.totals.total.toFixed(2)}</td>
                         </tr>
                         ${
                           order.tracking?.carrier

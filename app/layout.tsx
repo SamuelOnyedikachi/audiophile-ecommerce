@@ -7,8 +7,14 @@ import ClientProviders from './components/ClientProviders';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Audiophile E-Commerce',
-  description: 'High-end audio equipment built with Next.js + Convex',
+  title: 'Audiophile Naija',
+  description:
+    'The ultimate destination for high-fidelity audio. Discover our exclusive collection of premium headphones, speakers, and earphones. Sound Perfected.',
+  // icons: {
+  //   icon: '/audio.png',
+  //   shortcut: '/audio.png',
+  //   apple: '/audio.png',
+  // },
 };
 
 const manrope = Manrope({
@@ -17,7 +23,11 @@ const manrope = Manrope({
   display: 'swap',
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className={`${manrope.variable} scroll-smooth`}>
       <body className="antialiased bg-light text-black flex flex-col min-h-screen selection:bg-primary/20 selection:text-primary">
