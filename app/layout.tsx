@@ -4,6 +4,7 @@ import { Manrope } from 'next/font/google';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ClientProviders from './components/ClientProviders';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -37,6 +38,7 @@ export default function RootLayout({
           <main className="flex-1 w-full max-w-[100%] mx-auto">{children}</main>
           <Footer />
         </ClientProviders>
+        <SpeedInsights />
       </body>
     </html>
   );
